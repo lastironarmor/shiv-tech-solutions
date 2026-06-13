@@ -1,777 +1,1309 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="scroll-smooth">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Shiv Jobs Portal</title>
-
-<link rel="icon" href="data:,">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-
-background:#f5f5f5;
-
-}
-
-header{
-
-background:#004aad;
-color:white;
-padding:15px;
-position:sticky;
-top:0;
-z-index:999;
-
-}
-
-.logo{
-
-font-size:30px;
-font-weight:bold;
-text-align:center;
-
-}
-
-nav{
-
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-gap:10px;
-margin-top:10px;
-
-}
-
-nav button{
-
-padding:8px 15px;
-border:none;
-background:white;
-color:#004aad;
-border-radius:5px;
-cursor:pointer;
-font-weight:bold;
-
-}
-
-nav button:hover{
-
-background:orange;
-color:white;
-
-}
-
-marquee{
-
-background:red;
-color:white;
-padding:8px;
-font-weight:bold;
-
-}
-
-.container{
-
-width:95%;
-max-width:1300px;
-margin:auto;
-padding:15px;
-
-}
-
-.search{
-
-margin:15px 0;
-
-}
-
-.search input{
-
-width:100%;
-padding:12px;
-font-size:16px;
-border-radius:5px;
-border:1px solid #ccc;
-
-}
-
-.cards{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:15px;
-
-}
-
-.card{
-
-background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
-
-}
-
-.card h3{
-
-color:#004aad;
-
-}
-
-.card p{
-
-margin-top:8px;
-
-}
-
-.card button{
-
-margin-top:10px;
-padding:8px 15px;
-background:#004aad;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
-
-}
-
-.card button:hover{
-
-background:green;
-
-}
-
-footer{
-
-background:#222;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:30px;
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovtJobsPortal - Premier Government Job Notifications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .ticker-wrap {
+            overflow: hidden;
+            width: 100%;
+        }
+        .ticker-move {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 25s linear infinite;
+        }
+        .ticker-move:hover {
+            animation-play-state: paused;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        /* Hide scrollbars but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-
-<body>
-
-<header>
-
-<div class="logo">
-
-Shiv Jobs Portal
-
-</div>
-
-<nav>
-
-<button>Home</button>
-
-<button>Latest Jobs</button>
-
-<button>Results</button>
-
-<button>Admit Card</button>
-
-<button>Syllabus</button>
-
-<button>Answer Key</button>
-
-</nav>
-
-</header>
-
-
-<marquee>
-
-🔥 Latest Government Jobs | Admit Card | Results | Free Job Alert | Shiv Jobs Portal 🔥
-
-</marquee>
-
-<div class="container">
-
-<div class="search">
-
-<input
-type="text"
-placeholder="Search Jobs..."
-id="search">
-
-</div>
-
-<div class="cards" id="jobs">
-
-</div>
-
-</div>
-
-<footer>
-
-© 2026 Shiv Jobs Portal
-
-</footer>
-
-<script>
-
-const jobs=[];
-// =======================
-// ADMIN SETTINGS
-// =======================
-
-const ADMIN_PASSWORD = "12345";
-
-let adminMode = false;
-
-// =======================
-// CREATE ADMIN BUTTON
-// =======================
-
-const adminBtn = document.createElement("button");
-
-adminBtn.innerHTML="🔒 Admin";
-
-adminBtn.style.position="fixed";
-adminBtn.style.bottom="20px";
-adminBtn.style.right="20px";
-adminBtn.style.background="#004aad";
-adminBtn.style.color="white";
-adminBtn.style.border="none";
-adminBtn.style.padding="10px 15px";
-adminBtn.style.borderRadius="50px";
-adminBtn.style.cursor="pointer";
-adminBtn.style.zIndex="9999";
-
-document.body.appendChild(adminBtn);
-
-// =======================
-// LOGIN
-// =======================
-
-adminBtn.onclick=function(){
-
-let pass=prompt("Enter Admin Password");
-
-if(pass===ADMIN_PASSWORD){
-
-adminMode=true;
-
-showAdminPanel();
-
-}else{
-
-alert("Wrong Password");
-
-}
-
-}
-
-// =======================
-// ADMIN PANEL
-// =======================
-
-function showAdminPanel(){
-
-const title=prompt("Job Title");
-
-if(!title) return;
-
-const dept=prompt("Department");
-
-const lastDate=prompt("Last Date");
-
-const qualification=prompt("Qualification");
-
-jobs.unshift({
-
-title,
-
-dept,
-
-lastDate,
-
-qualification
-
-});
-
-renderJobs();
-
-}
-
-// =======================
-// SHOW JOBS
-// =======================
-
-function renderJobs(){
-
-const box=document.getElementById("jobs");
-
-box.innerHTML="";
-
-jobs.forEach((job,index)=>{
-
-box.innerHTML+=`
-
-<div class="card">
-
-<h3>${job.title}</h3>
-
-<p><b>Department:</b> ${job.dept}</p>
-
-<p><b>Qualification:</b> ${job.qualification}</p>
-
-<p><b>Last Date:</b> ${job.lastDate}</p>
-
-<button onclick="viewJob(${index})">
-
-View Details
-
-</button>
-
-${adminMode?
-
-`<button
-style="background:red;margin-left:10px;"
-onclick="deleteJob(${index})">
-
-Delete
-
-</button>`
-
-:""}
-
-</div>
-
-`;
-
-});
-
-}
-
-// =======================
-// DELETE
-// =======================
-
-function deleteJob(i){
-
-if(confirm("Delete Job?")){
-
-jobs.splice(i,1);
-
-renderJobs();
-
-}
-
-}
-
-// =======================
-// VIEW
-// =======================
-
-function viewJob(i){
-
-alert(
-
-"Job : "+jobs[i].title+
-
-"\n\nDepartment : "+jobs[i].dept+
-
-"\n\nQualification : "+jobs[i].qualification+
-
-"\n\nLast Date : "+jobs[i].lastDate
-
-);
-
-}// ===========================
-// LOCAL STORAGE
-// ===========================
-
-function saveJobs(){
-
-localStorage.setItem(
-"shivJobs",
-JSON.stringify(jobs)
-);
-
-}
-
-function loadJobs(){
-
-const data=localStorage.getItem("shivJobs");
-
-if(data){
-
-jobs.length=0;
-
-JSON.parse(data).forEach(item=>{
-
-jobs.push(item);
-
-});
-
-}
-
-renderJobs();
-
-}
-
-window.onload=loadJobs;
-
-
-// ===========================
-// UPDATE renderJobs()
-// (Part 2 wali renderJobs()
-// ke END me sirf saveJobs()
-// add karna hai)
-// ===========================
-
-
-// Agar renderJobs() ke end me
-// saveJobs() nahi hai to
-// ye line add karo
-
-// saveJobs();
-
-
-// ===========================
-// LIVE SEARCH
-// ===========================
-
-document
-.getElementById("search")
-.addEventListener("keyup",function(){
-
-let value=this.value.toLowerCase();
-
-let cards=document.querySelectorAll(".card");
-
-cards.forEach(card=>{
-
-let text=card.innerText.toLowerCase();
-
-if(text.includes(value)){
-
-card.style.display="block";
-
-}else{
-
-card.style.display="none";
-
-}
-
-});
-
-});
-
-
-// ===========================
-// SAMPLE JOBS
-// (First Time)
-// ===========================
-
-if(localStorage.getItem("shivJobs")==null){
-
-jobs.push({
-
-title:"CG Police Constable 2026",
-
-dept:"Chhattisgarh Police",
-
-qualification:"10th / 12th",
-
-lastDate:"20 July 2026"
-
-});
-
-jobs.push({
-
-title:"Railway Group D Recruitment",
-
-dept:"Indian Railways",
-
-qualification:"10th Pass",
-
-lastDate:"15 August 2026"
-
-});
-
-jobs.push({
-
-title:"SSC MTS Recruitment",
-
-dept:"SSC",
-
-qualification:"10th Pass",
-
-lastDate:"30 July 2026"
-
-});
-
-saveJobs();
-
-renderJobs();
-
-}
-
-
-// ===========================
-// FEATURED LABEL
-// ===========================
-
-setTimeout(()=>{
-
-document
-.querySelectorAll(".card")
-.forEach((card,index)=>{
-
-if(index==0){
-
-let tag=document.createElement("div");
-
-tag.innerHTML="⭐ FEATURED";
-
-tag.style.background="green";
-
-tag.style.color="white";
-
-tag.style.padding="5px";
-
-tag.style.marginBottom="10px";
-
-tag.style.borderRadius="5px";
-
-card.prepend(tag);
-
-}
-
-});
-
-},500);// ==========================
-// HIDDEN ADMIN (7 LOGO CLICKS)
-// ==========================
-
-let logoClick = 0;
-
-document.querySelector(".logo").addEventListener("click", function(){
-
-logoClick++;
-
-if(logoClick>=7){
-
-logoClick=0;
-
-let pass=prompt("Enter Admin Password");
-
-if(pass===ADMIN_PASSWORD){
-
-adminMode=true;
-
-alert("Admin Mode Activated");
-
-renderJobs();
-
-}else{
-
-alert("Wrong Password");
-
-}
-
-}
-
-});
-
-
-// ==========================
-// LOGOUT
-// ==========================
-
-function logoutAdmin(){
-
-adminMode=false;
-
-renderJobs();
-
-}
-
-
-// ==========================
-// EDIT JOB
-// ==========================
-
-function editJob(i){
-
-let title=prompt("Job Title",jobs[i].title);
-
-if(title==null)return;
-
-let dept=prompt("Department",jobs[i].dept);
-
-if(dept==null)return;
-
-let qualification=prompt(
-
-"Qualification",
-
-jobs[i].qualification
-
-);
-
-if(qualification==null)return;
-
-let lastDate=prompt(
-
-"Last Date",
-
-jobs[i].lastDate
-
-);
-
-if(lastDate==null)return;
-
-jobs[i]={
-
-title,
-
-dept,
-
-qualification,
-
-lastDate
-
-};
-
-saveJobs();
-
-renderJobs();
-
-}
-
-
-// ==========================
-// UPDATE JOB CARDS
-// ==========================
-
-function renderJobs(){
-
-const box=document.getElementById("jobs");
-
-box.innerHTML="";
-
-jobs.forEach((job,index)=>{
-
-box.innerHTML+=`
-
-<div class="card">
-
-<h3>
-
-${job.title}
-
-</h3>
-
-<p>
-
-<b>Department :</b>
-
-${job.dept}
-
-</p>
-
-<p>
-
-<b>Qualification :</b>
-
-${job.qualification}
-
-</p>
-
-<p>
-
-<b>Last Date :</b>
-
-${job.lastDate}
-
-</p>
-
-<button onclick="viewJob(${index})">
-
-View Details
-
-</button>
-
-${
-adminMode?
-
-`
-
-<button
-onclick="editJob(${index})"
-style="background:orange;color:white;margin-left:5px;">
-
-Edit
-
-</button>
-
-<button
-onclick="deleteJob(${index})"
-style="background:red;color:white;margin-left:5px;">
-
-Delete
-
-</button>
-
-`
-
-:
-
-""
-
-}
-
-</div>
-
-`;
-
-});
-
-saveJobs();
-
-}
-
-
-// ==========================
-// LOGOUT SHORTCUT
-// ==========================
-
-document.addEventListener("keydown",function(e){
-
-if(e.ctrlKey && e.key=="l"){
-
-logoutAdmin();
-
-alert("Admin Logged Out");
-
-}
-
-});
-
-</script>
-
+<body class="bg-slate-50 text-slate-800 font-sans transition-colors duration-300 dark:bg-slate-900 dark:text-slate-100 min-h-screen pb-16 md:pb-0">
+
+    <div id="loading-screen" class="fixed inset-0 z-50 bg-slate-900 flex flex-col justify-center items-center transition-opacity duration-500">
+        <div class="relative w-24 h-24">
+            <div class="absolute inset-0 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="absolute inset-2 border-4 border-amber-500 border-b-transparent rounded-full animate-spin animate-reverse"></div>
+        </div>
+        <h2 class="text-white text-xl font-bold mt-4 tracking-wider">ROZGAR PORTAL</h2>
+        <p class="text-slate-400 text-sm mt-1">Loading Latest Government Jobs...</p>
+    </div>
+
+    <div class="bg-gradient-to-r from-amber-600 to-red-600 text-white text-sm font-medium py-2 px-4 shadow-md flex items-center z-40 relative">
+        <span class="bg-white text-red-700 text-xs font-black px-2 py-0.5 rounded animate-pulse mr-3 shrink-0 uppercase tracking-wider">Latest Update</span>
+        <div class="ticker-wrap flex-1">
+            <div id="ticker-container" class="ticker-move">
+                🔥 SSC CGL 2026 Notification Released: 15,000+ Vacancies, Apply Online Now! | UPSC Civil Services Mains Admit Card Out | Railway RPF Constable Last Date Extended till Next Week.
+            </div>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-30 glass border-b border-slate-200/50 dark:border-slate-700/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer select-none" id="logo-trigger">
+                <div class="bg-gradient-to-tr from-brand-600 to-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-brand-500/20">
+                    <i class="fa-solid to-amber-400 fa-building-columns text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black bg-gradient-to-r from-brand-600 to-indigo-600 dark:from-brand-400 dark:to-indigo-400 bg-clip-text text-transparent tracking-tight">GOVT</span>
+                    <span class="text-xl font-bold text-slate-800 dark:text-white">JOBS</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-6 font-semibold text-sm text-slate-600 dark:text-slate-300">
+                <a href="#" class="text-brand-600 dark:text-brand-400 hover:text-brand-700 transition">Home</a>
+                <a href="#categories-section" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Categories</a>
+                <a href="#jobs-section" class="hover:text-brand-600 dark:hover:text-brand-400 transition">All Notifications</a>
+                <a href="#analytics-section" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Statistics</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all shadow-sm" title="Toggle Theme">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+                </button>
+                
+                <div class="relative">
+                    <button id="notif-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all shadow-sm">
+                        <i class="fa-solid fa-bell"></i>
+                        <span id="notif-badge" class="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
+                    </button>
+                    <div id="notif-panel" class="hidden absolute right-0 mt-3 w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl overflow-hidden z-50">
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-700 font-bold flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+                            <span>Latest Alerts</span>
+                            <span class="text-xs bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">New</span>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto" id="notif-list">
+                            </div>
+                    </div>
+                </div>
+
+                <div id="admin-indicator" class="hidden flex items-center gap-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold px-3 py-2 rounded-xl border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                    Admin Active
+                    <button onclick="logoutAdmin()" class="ml-1 text-slate-400 hover:text-rose-500"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-12">
+
+        <section id="admin-dashboard" class="hidden transition-all duration-300 p-6 rounded-3xl bg-slate-900 text-white shadow-2xl relative overflow-hidden border border-slate-800">
+            <div class="absolute -right-16 -top-16 w-48 h-48 bg-brand-600/20 rounded-full blur-3xl"></div>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
+                <div>
+                    <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200"><i class="fa-solid fa-sliders mr-2"></i>Control Centre Dashboard</h2>
+                    <p class="text-xs text-slate-400 mt-1">Manage database objects, configure item status indicators, and update structural parameters live.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="openPostModal()" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5"><i class="fa-solid fa-plus text-sm"></i> Add New Notification</button>
+                    <button onclick="resetToDefaults()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5"><i class="fa-solid fa-rotate-left"></i> Load Defaults</button>
+                    <button onclick="logoutAdmin()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 border border-rose-500/30 font-bold text-xs px-4 py-2.5 rounded-xl transition"><i class="fa-solid fa-lock"></i> Exit</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Records</div>
+                    <div class="text-3xl font-black mt-1 text-slate-100" id="stat-total-posts">0</div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider text-emerald-400">Live Published</div>
+                    <div class="text-3xl font-black mt-1 text-emerald-400" id="stat-published-posts">0</div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider text-amber-400">Hidden / Draft</div>
+                    <div class="text-3xl font-black mt-1 text-amber-400" id="stat-hidden-posts">0</div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider text-purple-400">Pinned / Featured</div>
+                    <div class="text-3xl font-black mt-1 text-purple-400" id="stat-featured-posts">0</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-brand-950 text-white">
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
+
+            <div id="hero-slider" class="relative min-h-[380px] flex items-center p-6 sm:p-12 lg:p-16">
+                <div class="max-w-2xl relative z-10 space-y-6" id="hero-slide-content">
+                    <span class="inline-flex items-center gap-1.5 bg-brand-500/20 border border-brand-500/30 text-brand-300 font-bold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider">
+                        <i class="fa-solid fa-circle-check text-[10px] text-emerald-400"></i> Central & State Notifications 2026
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                        Your Gateway to a Secure <span class="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Government Career</span>
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-lg leading-relaxed">
+                        Access real-time verified updates, official recruitment announcements, syallbi information, and step-by-step guidance platforms directly from authentic state data.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a href="#jobs-section" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-brand-500/30 transition text-sm">Explore Positions</a>
+                        <a href="#categories-section" class="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold px-6 py-3 rounded-xl transition text-sm">Browse Stream Matrix</a>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-6 right-6 flex gap-2 z-20">
+                    <button onclick="switchSlide(0)" class="w-8 h-2 rounded-full bg-white transition-all slider-dot"></button>
+                    <button onclick="switchSlide(1)" class="w-2 h-2 rounded-full bg-white/40 transition-all slider-dot"></button>
+                    <button onclick="switchSlide(2)" class="w-2 h-2 rounded-full bg-white/40 transition-all slider-dot"></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-6">
+            <div class="glass border border-slate-200/60 dark:border-slate-700/60 shadow-xl rounded-3xl p-4 sm:p-6 transition-all">
+                <div class="flex flex-col lg:flex-row items-stretch gap-4">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" id="search-input" oninput="executeSearchFilter()" placeholder="Search by job title, specific department, key description keywords..." class="w-full bg-slate-100 dark:bg-slate-800/80 border-0 focus:ring-2 focus:ring-brand-500 rounded-2xl pl-12 pr-4 py-4 font-medium placeholder-slate-400 dark:placeholder-slate-500 transition-all text-sm">
+                    </div>
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 lg:pb-0" id="filter-chips-container">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categories-section" class="space-y-4">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h3 class="text-xl font-extrabold tracking-tight">Streamlined Functional Matrices</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Filter entire system datasets down to exact administrative sectors instantaneously.</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div onclick="selectCategoryChip('SSC')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-md transition-all text-center space-y-2 hover:-translate-y-1">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl group-hover:scale-110 transition"><i class="fa-solid fa-building-user"></i></div>
+                    <div class="font-bold text-xs tracking-tight">SSC Portfolios</div>
+                </div>
+                <div onclick="selectCategoryChip('Railway')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-md transition-all text-center space-y-2 hover:-translate-y-1">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl group-hover:scale-110 transition"><i class="fa-solid fa-train"></i></div>
+                    <div class="font-bold text-xs tracking-tight">Rail Logistics</div>
+                </div>
+                <div onclick="selectCategoryChip('Police')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-md transition-all text-center space-y-2 hover:-translate-y-1">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="font-bold text-xs tracking-tight">Law Enforcement</div>
+                </div>
+                <div onclick="selectCategoryChip('Bank')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-md transition-all text-center space-y-2 hover:-translate-y-1">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl group-hover:scale-110 transition"><i class="fa-solid fa-vault"></i></div>
+                    <div class="font-bold text-xs tracking-tight">Banking Sectors</div>
+                </div>
+                <div onclick="selectCategoryChip('UPSC')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-md transition-all text-center space-y-2 hover:-translate-y-1">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-rose-100 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl group-hover:scale-110 transition"><i class="fa-solid fa-crown"></i></div>
+                    <div class="font-bold text-xs tracking-tight">UPSC Services</div>
+                </div>
+                <div onclick="selectCategoryChip('State Jobs')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm hover:shadow-md transition-all text-center space-y-2 hover:-translate-y-1">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-indigo-100 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl group-hover:scale-110 transition"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <div class="font-bold text-xs tracking-tight">State Domestics</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="jobs-section" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h3 class="text-2xl font-black tracking-tight" id="jobs-heading-text">Active Opportunities</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Real-time data sets indexed according to application parameters and administrative verification.</p>
+                </div>
+                <div class="flex items-center gap-2 self-start sm:self-auto">
+                    <select id="sort-filter" onchange="executeSearchFilter()" class="bg-white dark:bg-slate-800 text-xs font-semibold px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-1 focus:ring-brand-500">
+                        <option value="default">Default Sort Order</option>
+                        <option value="date-asc">Closing Date (Soonest First)</option>
+                        <option value="date-desc">Closing Date (Furthest First)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="jobs-grid-target" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+
+            <div id="jobs-empty-state" class="hidden text-center py-16 bg-white dark:bg-slate-800/40 border border-dashed border-slate-200 dark:border-slate-700 rounded-3xl max-w-md mx-auto p-6 space-y-3">
+                <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 text-2xl mx-auto"><i class="fa-solid fa-folder-open"></i></div>
+                <h4 class="font-bold text-base">No Data Matches Query</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">No records matches the applied combination of filters or title parameters. Adjust constraints and execute structural queries again.</p>
+                <button onclick="clearAllFilters()" class="text-xs bg-brand-600 text-white font-bold px-4 py-2 rounded-xl">Clear System Restraints</button>
+            </div>
+        </section>
+
+        <section id="analytics-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-850 p-6 rounded-3xl border border-slate-200/60 dark:border-slate-700/60 shadow-xl space-y-4">
+                <h4 class="font-black text-lg tracking-tight">System Notification Architecture</h4>
+                <p class="text-xs text-slate-400">Current platform status and structural distribution array of active job entries inside memory storage.</p>
+                <div class="space-y-3 pt-2">
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1">
+                            <span>Central Executive Staffing (SSC / UPSC)</span>
+                            <span id="progress-text-central">45%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                            <div id="progress-bar-central" class="bg-brand-500 h-full transition-all" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1">
+                            <span>National Transport & Infrastructure (Railways)</span>
+                            <span id="progress-text-railway">25%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                            <div id="progress-bar-railway" class="bg-amber-500 h-full transition-all" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1">
+                            <span>State Auxiliary Boards & Territorial Allocations</span>
+                            <span id="progress-text-state">30%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                            <div id="progress-bar-state" class="bg-emerald-500 h-full transition-all" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200/60 dark:border-slate-700/60 shadow-xl flex flex-col justify-between space-y-4">
+                <div>
+                    <h4 class="font-black text-lg tracking-tight">Official Verification Disclaimer</h4>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">All information published is compiled from gazette announcements, ministerial feeds, and official departmental boards. Applicants are strictly urged to read primary notices explicitly before applying.</p>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 rounded-xl flex items-center gap-3">
+                    <i class="fa-solid fa-fingerprint text-brand-500 text-2xl"></i>
+                    <div>
+                        <div class="text-xs font-bold">Cryptographic Data Audit</div>
+                        <div class="text-[10px] text-slate-400">LocalStorage Instance Synced</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 border-t border-slate-800 text-white mt-16 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-brand-600 p-2 rounded-xl text-white">
+                            <i class="fa-solid fa-building-columns text-base"></i>
+                        </div>
+                        <span class="text-lg font-black tracking-tight">ROZGAR PORTAL</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">The premier decentralized aggregate system delivering fast, accurate, and structured notifications directly onto consumer screens.</p>
+                </div>
+                <div>
+                    <h5 class="font-bold text-xs uppercase tracking-wider text-amber-400 mb-3">Sectors Matrix</h5>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#" onclick="selectCategoryChip('SSC'); return false;" class="hover:text-white transition">Staff Selection (SSC)</a></li>
+                        <li><a href="#" onclick="selectCategoryChip('UPSC'); return false;" class="hover:text-white transition">Union Public Service</a></li>
+                        <li><a href="#" onclick="selectCategoryChip('Railway'); return false;" class="hover:text-white transition">Railway Recruitment</a></li>
+                        <li><a href="#" onclick="selectCategoryChip('Bank'); return false;" class="hover:text-white transition">Banking Personnel Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-xs uppercase tracking-wider text-amber-400 mb-3">Resource Desks</h5>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#" class="hover:text-white transition">Syllabus Archives</a></li>
+                        <li><a href="#" class="hover:text-white transition">Admit Cards Hub</a></li>
+                        <li><a href="#" class="hover:text-white transition">Answer Key Metrics</a></li>
+                        <li><a href="#" class="hover:text-white transition">Result Declarations</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-xs uppercase tracking-wider text-amber-400 mb-3">Help Desk Support</h5>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#" class="hover:text-white transition">Grievance Registration</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms of Use Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy Architecture</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact Portal Board</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-center text-slate-500 text-xs gap-4">
+                <div>&copy; 2026 GovtJobsPortal. Complete production-ready architecture. All rights reserved.</div>
+                <div class="flex gap-4 text-base">
+                    <a href="#" class="hover:text-slate-300 transition"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="hover:text-slate-300 transition"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" class="hover:text-slate-300 transition"><i class="fa-brands fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-2 shadow-2xl flex justify-around items-center">
+        <a href="#" class="flex flex-col items-center gap-0.5 text-brand-600 dark:text-brand-400">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] font-bold">Home</span>
+        </a>
+        <a href="#categories-section" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <i class="fa-solid fa-grip text-lg"></i>
+            <span class="text-[10px] font-medium">Categories</span>
+        </a>
+        <a href="#jobs-section" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <i class="fa-solid fa-briefcase text-lg"></i>
+            <span class="text-[10px] font-medium">Jobs</span>
+        </a>
+        <button onclick="triggerAdminFloatingAction()" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <i class="fa-solid fa-lock text-lg"></i>
+            <span class="text-[10px] font-medium">Admin</span>
+        </button>
+    </div>
+
+    <div id="admin-auth-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 transition-all">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4 relative">
+            <button onclick="closeAdminAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 text-xl rounded-2xl flex items-center justify-center mx-auto"><i class="fa-solid fa-shield-halved"></i></div>
+                <h4 class="font-black text-lg tracking-tight">System Level Override</h4>
+                <p class="text-xs text-slate-400">Provide administrative access clearance credentials below.</p>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Passcode Hash</label>
+                <input type="password" id="admin-passcode-field" placeholder="••••••••" class="w-full bg-slate-100 dark:bg-slate-900 border-0 focus:ring-2 focus:ring-brand-500 rounded-xl px-4 py-3 text-center font-black tracking-widest text-lg">
+                <p id="admin-auth-error" class="hidden text-rose-500 text-xs font-semibold text-center mt-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Passcode invalid. Verification denied.</p>
+            </div>
+            <button onclick="verifyAdminPasscode()" class="w-full bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition text-sm shadow-lg shadow-brand-500/10">Authorize Key</button>
+        </div>
+    </div>
+
+    <div id="post-editor-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-2xl rounded-3xl p-6 shadow-2xl my-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h4 id="editor-modal-title" class="font-black text-xl tracking-tight mb-4 text-brand-600 dark:text-brand-400">Add New Notification Entity</h4>
+            
+            <form id="editor-form" onsubmit="savePostFormEntity(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="edit-entity-id">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-500 uppercase">Notification Headline Title *</label>
+                        <input type="text" id="form-title" required placeholder="e.g., Sub Inspector Recruitment 2026" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-500 uppercase">Department / Board Agency *</label>
+                        <input type="text" id="form-dept" required placeholder="e.g., Staff Selection Board" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-500 uppercase">Category Track *</label>
+                        <select id="form-category" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium">
+                            <option value="SSC">SSC</option>
+                            <option value="Railway">Railway</option>
+                            <option value="Police">Police</option>
+                            <option value="Bank">Bank</option>
+                            <option value="UPSC">UPSC</option>
+                            <option value="State Jobs">State Jobs</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-500 uppercase">Target Qualification *</label>
+                        <input type="text" id="form-qual" required placeholder="e.g., Graduate in any stream / 10+2" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-500 uppercase">Closing Last Date *</label>
+                        <input type="date" id="form-date" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-500 uppercase">Direct Application Router Link *</label>
+                        <input type="url" id="form-apply" required placeholder="https://example.gov.in/apply" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-500 uppercase">Official Advertising Dossier URL *</label>
+                        <input type="url" id="form-details" required placeholder="https://example.gov.in/notif.pdf" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="font-bold text-slate-500 uppercase">Comprehensive Description & Vacancy Breakdown Matrix</label>
+                    <textarea id="form-desc" rows="4" placeholder="Enter post eligibility criteria, age constraints, tier frameworks or grade patterns detailed parameters transparently..." class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5 font-medium"></textarea>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-900/40 p-4 rounded-2xl grid grid-cols-2 sm:grid-cols-3 gap-4 border border-slate-100 dark:border-slate-800">
+                    <label class="flex items-center gap-2 font-bold text-slate-600 dark:text-slate-400 cursor-pointer">
+                        <input type="checkbox" id="form-published" checked class="rounded text-brand-600 focus:ring-brand-500 bg-slate-200 dark:bg-slate-800 border-0">
+                        <span>Publish Live</span>
+                    </label>
+                    <label class="flex items-center gap-2 font-bold text-slate-600 dark:text-slate-400 cursor-pointer">
+                        <input type="checkbox" id="form-featured" class="rounded text-brand-600 focus:ring-brand-500 bg-slate-200 dark:bg-slate-800 border-0">
+                        <span>Mark Featured</span>
+                    </label>
+                    <label class="flex items-center gap-2 font-bold text-slate-600 dark:text-slate-400 cursor-pointer">
+                        <input type="checkbox" id="form-pinned" class="rounded text-brand-600 focus:ring-brand-500 bg-slate-200 dark:bg-slate-800 border-0">
+                        <span>Pin to Top Matrix</span>
+                    </label>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closePostModal()" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-bold px-5 py-2.5 rounded-xl transition">Cancel</button>
+                    <button type="submit" class="bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-brand-500/10 transition">Save Package Database</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="detail-view-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-xl rounded-3xl p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div id="detail-modal-target-content" class="space-y-6">
+                </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-20 md:bottom-6 right-6 flex flex-col gap-3 z-40">
+        <button onclick="triggerAdminFloatingAction()" class="w-12 h-12 bg-gradient-to-tr from-slate-800 to-slate-950 text-amber-400 shadow-xl rounded-full flex items-center justify-center border border-slate-700 hover:scale-110 transition-all duration-200" title="Admin Secure Gateway">
+            <i class="fa-solid fa-lock text-sm"></i>
+        </button>
+        <button id="back-to-top-btn" onclick="scrollToTopHead()" class="opacity-0 translate-y-4 pointer-events-none w-12 h-12 bg-brand-600 text-white shadow-xl rounded-full flex items-center justify-center hover:bg-brand-500 transition-all duration-300" title="Scroll To Top Header">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <script>
+        // System Immutable Data Defaults (Used for Initial Seeding Sequence or Cache Clear)
+        const SEED_DEFAULT_RECORDS = [
+            {
+                id: "notif-2026-001",
+                title: "Combined Graduate Level (CGL) Examination 2026",
+                department: "Staff Selection Commission (SSC)",
+                category: "SSC",
+                qualification: "Bachelor Degree in any discipline from a recognized University",
+                lastDate: "2026-07-15",
+                applyUrl: "https://ssc.gov.in",
+                detailsUrl: "https://ssc.gov.in/notifications",
+                description: "Official 2026 administrative staff aggregate dispatch. Vacancy distribution matrices span Inspector lines, Assistant Section Officers, Audit Executives, and Central Narcotics taskforces. Age allocation limits apply at 18-32 intervals with standard statutory reservation remissions.",
+                published: true,
+                featured: true,
+                pinned: true,
+                timestamp: Date.now() - 3600000
+            },
+            {
+                id: "notif-2026-002",
+                title: "Civil Services Preliminary Examination 2026",
+                department: "Union Public Service Commission (UPSC)",
+                category: "UPSC",
+                qualification: "Graduate Degree or equivalent appearing candidates",
+                lastDate: "2026-06-30",
+                applyUrl: "https://upsconline.nic.in",
+                detailsUrl: "https://upsc.gov.in",
+                description: "National executive service framework mobilization for IAS, IPS, IFS, and Central Group A operational cadres. Total consolidated ledger allocations indicate 1,150 seats. Preliminary screen sequences scheduled uniformly nationwide.",
+                published: true,
+                featured: true,
+                pinned: false,
+                timestamp: Date.now() - 7200000
+            },
+            {
+                id: "notif-2026-003",
+                title: "RPF Constable & Sub-Inspector Pool",
+                department: "Railway Recruitment Boards (RRB)",
+                category: "Railway",
+                qualification: "10th Pass / Matriculation or Graduation for SI Track",
+                lastDate: "2026-06-25",
+                applyUrl: "https://rrbapply.gov.in",
+                detailsUrl: "https://indianrailways.gov.in",
+                description: "Security cadre optimization drive inside Railway Protection Force. Strict physical measurements criteria and computer-based evaluation grids determine final merit selection parameters.",
+                published: true,
+                featured: false,
+                pinned: false,
+                timestamp: Date.now() - 86400000
+            },
+            {
+                id: "notif-2026-004",
+                title: "Probationary Officers (PO) Scale-I Drive",
+                department: "Institute of Banking Personnel Selection (IBPS)",
+                category: "Bank",
+                qualification: "Any University Graduate with Computer Literacy credits",
+                lastDate: "2026-08-05",
+                applyUrl: "https://ibps.in",
+                detailsUrl: "https://ibps.in/notif-po",
+                description: "Core banking operational staff induction platform across 11 participating public sector finance bodies. Three-tier filtering includes Preliminary, Main Written Examination, and Centralized Interview matrices.",
+                published: true,
+                featured: false,
+                pinned: false,
+                timestamp: Date.now() - 172800000
+            },
+            {
+                id: "notif-2026-005",
+                title: "State Police Constable Mega Recruitment",
+                department: "State Home Department Board",
+                category: "Police",
+                qualification: "Higher Secondary (10+2) Pass or vocational equivalent certificate",
+                lastDate: "2026-06-20",
+                applyUrl: "https://statepolice.gov.in",
+                detailsUrl: "https://statepolice.gov.in/recruitment",
+                description: "Regional territorial law enforcement reinforcement mobilization deployment. Candidates must belong to native regional status metrics or possess equivalent cross-border domicile registration passes.",
+                published: true,
+                featured: false,
+                pinned: false,
+                timestamp: Date.now() - 259200000
+            }
+        ];
+
+        // Global State Engine Context
+        let appState = {
+            posts: [],
+            bookmarks: [],
+            isAdmin: false,
+            currentFilterCategory: "All Jobs",
+            logoClickCounter: 0,
+            logoTimer: null,
+            activeHeroSlideIndex: 0
+        };
+
+        // Hero Slider Text Matrices Array
+        const SLIDER_DATA_MATRIX = [
+            {
+                badge: "<i class='fa-solid fa-circle-check text-[10px] text-emerald-400'></i> Central & State Notifications 2026",
+                title: "Your Gateway to a Secure <span class='bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent'>Government Career</span>",
+                desc: "Access real-time verified updates, official recruitment announcements, syallbi information, and step-by-step guidance platforms directly from authentic state data."
+            },
+            {
+                badge: "<i class='fa-solid fa-fire text-[10px] text-amber-400'></i> High Volume Grid Target",
+                title: "Over <span class='bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent'>50,000+ Active Seats</span> Indexed",
+                desc: "Our automated parsing aggregate map synchronizes with national gazettes daily to isolate application window deadlines, eligibility matrix structures, and digital admit cards instantly."
+            },
+            {
+                badge: "<i class='fa-solid fa-shield text-[10px] text-purple-400'></i> Security Clearance Authentic",
+                title: "Zero Placeholders. <span class='bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent'>Verified Portals Only</span>",
+                desc: "Eliminate downstream redirection loops. Access direct destination servers hosted explicitly inside national cryptographic infrastructures directly via one click."
+            }
+        ];
+
+        // System Initialization Lifecycle Hook
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeThemeEngine();
+            loadDatabaseFromStorage();
+            initializeFilterChipsUI();
+            renderActiveJobsDisplayGrid();
+            executeDataMetricsCalculations();
+            bootTickerUpdatesFeed();
+            setupInterfaceListeners();
+            startHeroSliderRotation();
+            
+            // Artificial delay to smooth UI render transition
+            setTimeout(() => {
+                const screen = document.getElementById('loading-screen');
+                screen.classList.add('opacity-0');
+                setTimeout(() => screen.remove(), 500);
+            }, 800);
+        });
+
+        // Interface System Event Handlers Hook
+        function setupInterfaceListeners() {
+            // Document level click close hooks for floating overlays
+            document.addEventListener('click', (e) => {
+                const panel = document.getElementById('notif-panel');
+                const btn = document.getElementById('notif-btn');
+                if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
+                    panel.classList.add('hidden');
+                }
+            });
+
+            // Specific Notification Trigger button layout hook
+            document.getElementById('notif-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('notif-panel').classList.toggle('hidden');
+            });
+
+            // Scroll position hook to handle floating button state animations
+            window.addEventListener('scroll', () => {
+                const btn = document.getElementById('back-to-top-btn');
+                if (window.scrollY > 300) {
+                    btn.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                } else {
+                    btn.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                }
+            });
+
+            // Setup Logo Complex Click Pattern Recognition Trigger Area
+            document.getElementById('logo-trigger').addEventListener('click', () => {
+                appState.logoClickCounter++;
+                clearTimeout(appState.logoTimer);
+                
+                if (appState.logoClickCounter >= 7) {
+                    appState.logoClickCounter = 0;
+                    openAdminAuthModal();
+                } else {
+                    appState.logoTimer = setTimeout(() => { appState.logoClickCounter = 0; }, 3000);
+                }
+            });
+        }
+
+        // Theme Configuration Engine Mechanics
+        function initializeThemeEngine() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+
+        // Structural Database State Synchronization Layer
+        function loadDatabaseFromStorage() {
+            const rawPosts = localStorage.getItem('gov_jobs_portal_posts');
+            const rawBookmarks = localStorage.getItem('gov_jobs_portal_bookmarks');
+            const rawAdminState = localStorage.getItem('gov_jobs_portal_admin_active');
+
+            if (rawPosts) {
+                appState.posts = JSON.parse(rawPosts);
+            } else {
+                appState.posts = [...SEED_DEFAULT_RECORDS];
+                saveDatabaseToStorage();
+            }
+
+            appState.bookmarks = rawBookmarks ? JSON.parse(rawBookmarks) : [];
+            
+            if (rawAdminState === 'true') {
+                appState.isAdmin = true;
+                evaluateAdminUIVisibilityState();
+            }
+        }
+
+        function saveDatabaseToStorage() {
+            localStorage.setItem('gov_jobs_portal_posts', JSON.stringify(appState.posts));
+            localStorage.setItem('gov_jobs_portal_bookmarks', JSON.stringify(appState.bookmarks));
+        }
+
+        function resetToDefaults() {
+            if (confirm("Reset current execution database back to factory standard seed profiles? All customized updates will overwrite.")) {
+                appState.posts = [...SEED_DEFAULT_RECORDS];
+                saveDatabaseToStorage();
+                renderActiveJobsDisplayGrid();
+                executeDataMetricsCalculations();
+                closePostModal();
+            }
+        }
+
+        // Dynamic Stream Filter Matrix Builder Elements
+        function initializeFilterChipsUI() {
+            const sectors = ["All Jobs", "SSC", "Railway", "Police", "Bank", "UPSC", "State Jobs"];
+            const target = document.getElementById('filter-chips-container');
+            target.innerHTML = '';
+
+            sectors.forEach(sector => {
+                const chip = document.createElement('button');
+                chip.setAttribute('id', `chip-${sector.replace(/\s+/g, '-')}`);
+                chip.setAttribute('onclick', `selectCategoryChip('${sector}')`);
+                chip.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap border shrink-0 " + 
+                                 (appState.currentFilterCategory === sector 
+                                    ? "bg-brand-600 text-white border-brand-600 shadow-md shadow-brand-500/15" 
+                                    : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700");
+                chip.textContent = sector;
+                target.appendChild(chip);
+            });
+        }
+
+        function selectCategoryChip(sector) {
+            appState.currentFilterCategory = sector;
+            initializeFilterChipsUI();
+            executeSearchFilter();
+            
+            // Automatically scroll workspace grid target focus coordinates into range
+            document.getElementById('jobs-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function clearAllFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('sort-filter').value = 'default';
+            selectCategoryChip('All Jobs');
+        }
+
+        // Complex Multi-stage Runtime Evaluation Filtering Pipeline Engine
+        function executeSearchFilter() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const sortMode = document.getElementById('sort-filter').value;
+            const targetGrid = document.getElementById('jobs-grid-target');
+            const emptyState = document.getElementById('jobs-empty-state');
+
+            // Apply standard predicate filtration operations across full record set
+            let results = appState.posts.filter(item => {
+                // Admin context parameters rule: Hidden entries stay isolated from normal consumers completely
+                if (!item.published && !appState.isAdmin) return false;
+
+                const matchCategory = (appState.currentFilterCategory === "All Jobs" || item.category === appState.currentFilterCategory);
+                const matchSearchQuery = (!query || 
+                    item.title.toLowerCase().includes(query) || 
+                    item.department.toLowerCase().includes(query) || 
+                    item.qualification.toLowerCase().includes(query) || 
+                    item.description.toLowerCase().includes(query)
+                );
+
+                return matchCategory && matchSearchQuery;
+            });
+
+            // Enforce custom sort prioritization logic matrices
+            // Primary Sort Directive: Pinned notifications retain absolute dominance at structural root context
+            results.sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                
+                // Secondary Sort Directive: Applied selected algorithmic constraints
+                if (sortMode === 'date-asc') {
+                    return new Date(a.lastDate) - new Date(b.lastDate);
+                } else if (sortMode === 'date-desc') {
+                    return new Date(b.lastDate) - new Date(a.lastDate);
+                } else {
+                    // Default Sequence: Temporal execution lineage (newest object entries appear first standard)
+                    return b.timestamp - a.timestamp;
+                }
+            });
+
+            // Clear layout layer target container
+            targetGrid.innerHTML = '';
+
+            if (results.length === 0) {
+                emptyState.classList.remove('hidden');
+                document.getElementById('jobs-heading-text').textContent = "Search Scope Depleted";
+            } else {
+                emptyState.classList.add('hidden');
+                document.getElementById('jobs-heading-text').textContent = 
+                    appState.currentFilterCategory === "All Jobs" ? "Active Opportunities" : `${appState.currentFilterCategory} Postings Grid`;
+                
+                results.forEach(record => {
+                    targetGrid.appendChild(compileJobCardHTMLComponent(record));
+                });
+            }
+        }
+
+        function renderActiveJobsDisplayGrid() {
+            executeSearchFilter();
+        }
+
+        // Job DOM Component Structural Assembly Assembly Line Factory
+        function compileJobCardHTMLComponent(item) {
+            const isBookmarked = appState.bookmarks.includes(item.id);
+            const card = document.createElement('div');
+            
+            // Structural layout properties with specific conditional styling matrices
+            card.className = "group relative bg-white dark:bg-slate-800 rounded-3xl border transition-all duration-300 shadow-sm hover:shadow-xl flex flex-col justify-between overflow-hidden " + 
+                             (item.pinned ? "border-amber-500/40 dark:border-amber-400/30 ring-1 ring-amber-500/20" : "border-slate-200/70 dark:border-slate-700/70") + 
+                             (!item.published ? " opacity-75 grayscale-[30%] border-dashed border-rose-500" : "");
+
+            // Assemble header indicator labels array strings dynamically
+            let badgesHTML = '';
+            if (item.pinned) {
+                badgesHTML += `<span class="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wide flex items-center gap-1"><i class="fa-solid fa-thumbtack text-[8px]"></i> Pinned</span>`;
+            } else if (item.featured) {
+                badgesHTML += `<span class="bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide">Featured</span>`;
+            }
+            badgesHTML += `<span class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide">${item.category}</span>`;
+
+            // Setup Admin Action Block Markup Segment conditionally
+            let adminActionStrip = '';
+            if (appState.isAdmin) {
+                adminActionStrip = `
+                    <div class="bg-slate-100 dark:bg-slate-900 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/50 dark:border-slate-700/50 text-[11px]">
+                        <div class="flex items-center gap-1.5 font-bold">
+                            <span class="${item.published ? 'text-emerald-500' : 'text-rose-500'}">
+                                <i class="fa-solid ${item.published ? 'fa-eye' : 'fa-eye-slash'}"></i> ${item.published ? 'Live' : 'Hidden'}
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="togglePublishState('${item.id}')" class="text-slate-500 hover:text-brand-500 transition" title="Toggle Visibility Status"><i class="fa-solid fa-power-off text-sm"></i></button>
+                            <button onclick="togglePinState('${item.id}')" class="text-slate-500 hover:text-amber-500 transition" title="Toggle Pin Placement"><i class="fa-solid fa-thumbtack text-sm"></i></button>
+                            <button onclick="openPostModal('${item.id}')" class="text-slate-500 hover:text-indigo-500 transition" title="Edit Configuration Properties"><i class="fa-solid fa-pen-to-square text-sm"></i></button>
+                            <button onclick="deletePostEntity('${item.id}')" class="text-slate-400 hover:text-rose-500 transition" title="Purge Record Object"><i class="fa-solid fa-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Compile localized date object transformations metrics safely
+            const dateObj = new Date(item.lastDate);
+            const formattedClosingDate = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+            
+            // Evaluate chronological safety indices
+            const isWindowClosingImminently = (dateObj - new Date()) < (5 * 86400000);
+            const closureAlertBadgeStyle = isWindowClosingImminently ? "text-red-500 font-bold animate-pulse" : "text-slate-600 dark:text-slate-400 font-medium";
+
+            card.innerHTML = `
+                ${adminActionStrip}
+                <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                            <div class="flex items-center gap-1.5 flex-wrap">${badgesHTML}</div>
+                            <div class="flex items-center gap-1 text-slate-400">
+                                <button onclick="toggleBookmarkState('${item.id}')" class="hover:text-rose-500 transition p-1 text-sm">
+                                    <i class="${isBookmarked ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark'}"></i>
+                                </button>
+                                <button onclick="dispatchShareIntent('${item.id}')" class="hover:text-brand-500 transition p-1 text-sm" title="Share Entity Data">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <h4 onclick="triggerDetailModal('${item.id}')" class="font-extrabold text-base leading-snug text-slate-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 cursor-pointer transition line-clamp-2">${item.title}</h4>
+                            <div class="text-xs font-semibold text-brand-600 dark:text-brand-400 flex items-center gap-1">
+                                <i class="fa-solid fa-building text-[10px]"></i> ${item.department}
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-400 dark:text-slate-400 line-clamp-2 leading-relaxed">${item.description || 'No additional criteria parsed fields recorded. Consult official reference parameters.'}</p>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60 grid grid-cols-2 gap-2 text-[11px]">
+                        <div>
+                            <span class="block text-[10px] uppercase text-slate-400 font-bold tracking-wider">Qualification</span>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 line-clamp-1">${item.qualification}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase text-slate-400 font-bold tracking-wider">Closing Window</span>
+                            <span class="block line-clamp-1 ${closureAlertBadgeStyle}"><i class="fa-regular fa-calendar-xmark mr-0.5"></i> ${formattedClosingDate}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-5 pb-5 pt-1 grid grid-cols-2 gap-2.5">
+                    <button onclick="triggerDetailModal('${item.id}')" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold text-xs py-2.5 rounded-xl transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-circle-info"></i> Guide Matrix
+                    </button>
+                    <a href="${item.applyUrl}" target="_blank" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs py-2.5 rounded-xl transition text-center shadow-md shadow-brand-500/10 flex items-center justify-center gap-1">
+                        Apply Now <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                    </a>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Live Operational Summary Analyzer Module
+        function executeDataMetricsCalculations() {
+            const totals = appState.posts.length;
+            const published = appState.posts.filter(p => p.published).length;
+            const hidden = totals - published;
+            const featured = appState.posts.filter(p => p.featured || p.pinned).length;
+
+            // Admin interface update checks
+            const totalTarget = document.getElementById('stat-total-posts');
+            if (totalTarget) {
+                totalTarget.textContent = totals;
+                document.getElementById('stat-published-posts').textContent = published;
+                document.getElementById('stat-hidden-posts').textContent = hidden;
+                document.getElementById('stat-featured-posts').textContent = featured;
+            }
+
+            // Realtime computing percentage distributions for tracking graphs
+            const cCount = appState.posts.filter(p => p.category === 'SSC' || p.category === 'UPSC').length;
+            const rCount = appState.posts.filter(p => p.category === 'Railway').length;
+            const sCount = appState.posts.filter(p => p.category === 'State Jobs' || p.category === 'Police').length;
+
+            const cPercent = totals ? Math.round((cCount / totals) * 100) : 0;
+            const rPercent = totals ? Math.round((rCount / totals) * 100) : 0;
+            const sPercent = totals ? Math.round((sCount / totals) * 100) : 0;
+
+            document.getElementById('progress-text-central').textContent = `${cPercent}%`;
+            document.getElementById('progress-bar-central').style.width = `${cPercent}%`;
+
+            document.getElementById('progress-text-railway').textContent = `${rPercent}%`;
+            document.getElementById('progress-bar-railway').style.width = `${rPercent}%`;
+
+            document.getElementById('progress-text-state').textContent = `${sPercent}%`;
+            document.getElementById('progress-bar-state').style.width = `${sPercent}%`;
+        }
+
+        // Realtime Global Notification Alert Pipeline System Mock Engine
+        function bootTickerUpdatesFeed() {
+            const listTarget = document.getElementById('notif-list');
+            const tickerTarget = document.getElementById('ticker-container');
+            
+            // Read active lists fields down to maximum 5 items for clean layout preservation
+            const activeFeedItems = appState.posts.filter(p => p.published).slice(0, 5);
+            
+            if(activeFeedItems.length === 0) {
+                listTarget.innerHTML = `<div class='p-4 text-center text-xs text-slate-400'>No notifications active in system channel.</div>`;
+                return;
+            }
+
+            listTarget.innerHTML = '';
+            let tickerString = "";
+
+            activeFeedItems.forEach(item => {
+                tickerString += ` 🔥 ${item.title} (${item.department}) Last Date: ${item.lastDate} | `;
+                
+                const alertRow = document.createElement('div');
+                alertRow.onclick = () => {
+                    triggerDetailModal(item.id);
+                    document.getElementById('notif-panel').classList.add('hidden');
+                };
+                alertRow.className = "p-3 border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer transition flex flex-col gap-0.5 text-xs";
+                alertRow.innerHTML = `
+                    <div class="font-bold text-slate-800 dark:text-slate-100 line-clamp-1">${item.title}</div>
+                    <div class="text-[10px] text-brand-500 font-semibold">${item.department}</div>
+                `;
+                listTarget.appendChild(alertRow);
+            });
+
+            tickerTarget.textContent = tickerString + " Check full structural details on destination official boards directly before deadlines close.";
+        }
+
+        // Administrative Access Cryptographic Passcode Layer
+        function triggerAdminFloatingAction() {
+            if (appState.isAdmin) {
+                // Toggle display viewport focusing dashboard visibility coordinates directly
+                const dashboard = document.getElementById('admin-dashboard');
+                dashboard.classList.toggle('hidden');
+                if(!dashboard.classList.contains('hidden')) {
+                    dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else {
+                openAdminAuthModal();
+            }
+        }
+
+        function openAdminAuthModal() {
+            document.getElementById('admin-passcode-field').value = '';
+            document.getElementById('admin-auth-error').classList.add('hidden');
+            document.getElementById('admin-auth-modal').classList.remove('hidden');
+            document.getElementById('admin-passcode-field').focus();
+        }
+
+        function closeAdminAuthModal() {
+            document.getElementById('admin-auth-modal').classList.add('hidden');
+        }
+
+        function verifyAdminPasscode() {
+            const code = document.getElementById('admin-passcode-field').value;
+            // Target Match Framework Requirements: '12345' Explicit
+            if (code === "12345") {
+                appState.isAdmin = true;
+                localStorage.setItem('gov_jobs_portal_admin_active', 'true');
+                closeAdminAuthModal();
+                evaluateAdminUIVisibilityState();
+                renderActiveJobsDisplayGrid();
+                executeDataMetricsCalculations();
+                
+                const db = document.getElementById('admin-dashboard');
+                db.classList.remove('hidden');
+                db.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                document.getElementById('admin-auth-error').classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            appState.isAdmin = false;
+            localStorage.setItem('gov_jobs_portal_admin_active', 'false');
+            evaluateAdminUIVisibilityState();
+            renderActiveJobsDisplayGrid();
+            executeDataMetricsCalculations();
+            document.getElementById('admin-dashboard').classList.add('hidden');
+        }
+
+        function evaluateAdminUIVisibilityState() {
+            const indicator = document.getElementById('admin-indicator');
+            if (appState.isAdmin) {
+                indicator.classList.remove('hidden');
+            } else {
+                indicator.classList.add('hidden');
+            }
+        }
+
+        // Administrative Mutation Logic Block Sequences
+        function togglePublishState(id) {
+            const matchIndex = appState.posts.findIndex(p => p.id === id);
+            if (matchIndex !== -1) {
+                appState.posts[matchIndex].published = !appState.posts[matchIndex].published;
+                saveDatabaseToStorage();
+                renderActiveJobsDisplayGrid();
+                executeDataMetricsCalculations();
+                bootTickerUpdatesFeed();
+            }
+        }
+
+        function togglePinState(id) {
+            const matchIndex = appState.posts.findIndex(p => p.id === id);
+            if (matchIndex !== -1) {
+                appState.posts[matchIndex].pinned = !appState.posts[matchIndex].pinned;
+                saveDatabaseToStorage();
+                renderActiveJobsDisplayGrid();
+                executeDataMetricsCalculations();
+            }
+        }
+
+        function deletePostEntity(id) {
+            if (confirm("Are you absolutely sure you want to permanently purge this entry notification entity profile object? This framework operation is destructive and instant.")) {
+                appState.posts = appState.posts.filter(p => p.id !== id);
+                appState.bookmarks = appState.bookmarks.filter(bId => bId !== id);
+                saveDatabaseToStorage();
+                renderActiveJobsDisplayGrid();
+                executeDataMetricsCalculations();
+                bootTickerUpdatesFeed();
+            }
+        }
+
+        // Form Modification Sheet Actions (Open/Close/Save)
+        function openPostModal(editId = null) {
+            const modal = document.getElementById('post-editor-modal');
+            const titleField = document.getElementById('editor-modal-title');
+            const form = document.getElementById('editor-form');
+            
+            form.reset();
+            document.getElementById('edit-entity-id').value = '';
+
+            if (editId) {
+                const entity = appState.posts.find(p => p.id === editId);
+                if (!entity) return;
+
+                titleField.textContent = "Modify Notification Configuration";
+                document.getElementById('edit-entity-id').value = entity.id;
+                document.getElementById('form-title').value = entity.title;
+                document.getElementById('form-dept').value = entity.department;
+                document.getElementById('form-category').value = entity.category;
+                document.getElementById('form-qual').value = entity.qualification;
+                document.getElementById('form-date').value = entity.lastDate;
+                document.getElementById('form-apply').value = entity.applyUrl;
+                document.getElementById('form-details').value = entity.detailsUrl;
+                document.getElementById('form-desc').value = entity.description || '';
+                document.getElementById('form-published').checked = entity.published;
+                document.getElementById('form-featured').checked = entity.featured;
+                document.getElementById('form-pinned').checked = entity.pinned;
+            } else {
+                titleField.textContent = "Create Brand New Recruitment Ledger Block";
+                document.getElementById('form-date').value = new Date(Date.now() + 30*86400000).toISOString().split('T')[0];
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closePostModal() {
+            document.getElementById('post-editor-modal').classList.add('hidden');
+        }
+
+        function savePostFormEntity(event) {
+            event.preventDefault();
+            
+            const targetId = document.getElementById('edit-entity-id').value;
+            
+            const compiledPackage = {
+                id: targetId || `notif-gen-${Date.now()}`,
+                title: document.getElementById('form-title').value.trim(),
+                department: document.getElementById('form-dept').value.trim(),
+                category: document.getElementById('form-category').value,
+                qualification: document.getElementById('form-qual').value.trim(),
+                lastDate: document.getElementById('form-date').value,
+                applyUrl: document.getElementById('form-apply').value.trim(),
+                detailsUrl: document.getElementById('form-details').value.trim(),
+                description: document.getElementById('form-desc').value.trim(),
+                published: document.getElementById('form-published').checked,
+                featured: document.getElementById('form-featured').checked,
+                pinned: document.getElementById('form-pinned').checked,
+                timestamp: Date.now()
+            };
+
+            if (targetId) {
+                // Update mutation lifecycle process pass
+                const index = appState.posts.findIndex(p => p.id === targetId);
+                if(index !== -1) {
+                    // Retain historical timestamp profile tracking values safely
+                    compiledPackage.timestamp = appState.posts[index].timestamp;
+                    appState.posts[index] = compiledPackage;
+                }
+            } else {
+                // Appending new record array parameters index positions standard
+                appState.posts.unshift(compiledPackage);
+            }
+
+            saveDatabaseToStorage();
+            renderActiveJobsDisplayGrid();
+            executeDataMetricsCalculations();
+            bootTickerUpdatesFeed();
+            closePostModal();
+        }
+
+        // Global Consumer Actions Logic Array Matrix
+        function toggleBookmarkState(id) {
+            const index = appState.bookmarks.indexOf(id);
+            if (index === -1) {
+                appState.bookmarks.push(id);
+            } else {
+                appState.bookmarks.splice(index, 1);
+            }
+            saveDatabaseToStorage();
+            renderActiveJobsDisplayGrid();
+        }
+
+        function dispatchShareIntent(id) {
+            const record = appState.posts.find(p => p.id === id);
+            if (!record) return;
+
+            const dispatchPayloadText = `🚨 Job Notification Alert: ${record.title} under ${record.department}. Eligibility Target: ${record.qualification}. Closing Window Threshold: ${record.lastDate}. Review official parameters live instantly.`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: record.title,
+                    text: dispatchPayloadText,
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                // Fallback action strategy loop: Clipboard synchronization layer copy execution
+                navigator.clipboard.writeText(`${dispatchPayloadText} Verified Gateway Connection: ${record.applyUrl}`).then(() => {
+                    alert("Cryptographic share payload text optimized and synchronized directly onto systemic operating clipboard buffer.");
+                });
+            }
+        }
+
+        // Deep Analytical Detail Extraction Overlay Panel Matrix
+        function triggerDetailModal(id) {
+            const record = appState.posts.find(p => p.id === id);
+            if (!record) return;
+
+            const target = document.getElementById('detail-modal-target-content');
+            const targetClosingFormattedStr = new Date(record.lastDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            target.innerHTML = `
+                <div class="space-y-2">
+                    <span class="inline-block bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-md">${record.category} Administration Section</span>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white leading-snug">${record.title}</h3>
+                    <p class="text-xs font-bold text-slate-500 flex items-center gap-1"><i class="fa-solid fa-building"></i> ${record.department}</p>
+                </div>
+
+                <div class="border-t border-b border-slate-100 dark:border-slate-700/60 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="space-y-1">
+                        <span class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Criteria Academic Baseline</span>
+                        <span class="font-semibold text-slate-800 dark:text-slate-200">${record.qualification}</span>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="block font-bold text-slate-400 uppercase tracking-wider text-[10px]">Absolute Closure Limit</span>
+                        <span class="font-bold text-red-500"><i class="fa-regular fa-clock"></i> ${targetClosingFormattedStr}</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                    <h5 class="font-black text-slate-900 dark:text-white uppercase tracking-wider text-[10px]">Operational Scope Profile & Syllabus Directives</h5>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/80">${record.description || 'No additional localized parameter logs have been mapped to memory strings for this notification packet yet. Read the attached gazette reference text dossiers explicitly using the secondary links navigation nodes below.'}</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <a href="${record.detailsUrl}" target="_blank" class="border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-bold text-xs py-3 rounded-xl transition text-center flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-file-pdf text-rose-500"></i> Download Official Notice
+                    </a>
+                    <a href="${record.applyUrl}" target="_blank" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs py-3 rounded-xl transition text-center shadow-lg shadow-brand-500/10 flex items-center justify-center gap-1.5">
+                        Apply Online Form Route <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+            `;
+
+            document.getElementById('detail-view-modal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-view-modal').classList.add('hidden');
+        }
+
+        // Hero Slider Banner Automated Rotation Engine Logic Controls
+        function startHeroSliderRotation() {
+            setInterval(() => {
+                appState.activeHeroSlideIndex = (appState.activeHeroSlideIndex + 1) % SLIDER_DATA_MATRIX.length;
+                switchSlide(appState.activeHeroSlideIndex);
+            }, 8000);
+        }
+
+        function switchSlide(index) {
+            appState.activeHeroSlideIndex = index;
+            const data = SLIDER_DATA_MATRIX[index];
+            const targetContainer = document.getElementById('hero-slide-content');
+            
+            // Perform rapid transition slide rendering transformations cleanly
+            targetContainer.style.opacity = 0;
+            
+            setTimeout(() => {
+                targetContainer.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 bg-brand-500/20 border border-brand-500/30 text-brand-300 font-bold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider">
+                        ${data.badge}
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                        ${data.title}
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-lg leading-relaxed">
+                        ${data.desc}
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a href="#jobs-section" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-brand-500/30 transition text-sm">Explore Positions</a>
+                        <a href="#categories-section" class="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold px-6 py-3 rounded-xl transition text-sm">Browse Stream Matrix</a>
+                    </div>
+                `;
+                targetContainer.style.opacity = 1;
+            }, 200);
+
+            // Synchronize lower slide state tracking configuration indicator dots array layout classes
+            const dots = document.querySelectorAll('.slider-dot');
+            dots.forEach((dot, dotIndex) => {
+                if(dotIndex === index) {
+                    dot.className = "w-8 h-2 rounded-full bg-white transition-all slider-dot";
+                } else {
+                    dot.className = "w-2 h-2 rounded-full bg-white/40 transition-all slider-dot";
+                }
+            });
+        }
+
+        // Global Structural Navigation System Utility Callbacks
+        function scrollToTopHead() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
 </body>
-
 </html>
