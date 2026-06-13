@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shiv Jobs Portal Pro - Premium Government Jobs Updates. Find latest Sarkari Result, Admit Cards, and Latest Jobs.">
+    <meta name="theme-color" content="#2563eb">
+    <title>Shiv Jobs Portal Pro | Latest Government Jobs 2024</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-briefcase"></i> <span>ShivJobsPro</span>
+            </a>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="pages/categories.html">Categories</a></li>
+                <li><a href="#latest-jobs">Latest Jobs</a></li>
+                <li><a href="#featured">Featured</a></li>
+                <li><a href="pages/contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="theme-toggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Find Your Dream <span class="text-gradient">Government Job</span></h1>
+                <p>Real-time updates for SSC, Banking, Railways, UPSC, and State Level Exams.</p>
+                
+                <div class="search-box">
+                    <div class="search-input">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="jobSearch" placeholder="Search by Job Title, Category or Location...">
+                    </div>
+                    <button class="btn-primary" onclick="handleSearch()">Search Jobs</button>
+                </div>
+
+                <div class="trending-tags">
+                    <span>Trending:</span>
+                    <a href="#">SSC CGL</a>
+                    <a href="#">IBPS PO</a>
+                    <a href="#">Railways</a>
+                    <a href="#">UPSC</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-shape">
+            <svg viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+        </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <div class="stats-bar container">
+        <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <div>
+                <h4 id="count-users">10k+</h4>
+                <p>Active Users</p>
+            </div>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-file-invoice"></i>
+            <div>
+                <h4 id="count-jobs">500+</h4>
+                <p>Jobs Posted</p>
+            </div>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-building"></i>
+            <div>
+                <h4 id="count-depts">50+</h4>
+                <p>Departments</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="container">
+        <!-- Featured Jobs -->
+        <section id="featured" class="section">
+            <div class="section-header">
+                <h2>Featured Jobs</h2>
+                <a href="pages/categories.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="job-grid" id="featuredJobsGrid">
+                <!-- Dynamic Content from Firebase -->
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </section>
+
+        <!-- Latest Jobs -->
+        <section id="latest-jobs" class="section">
+            <div class="section-header">
+                <h2>Latest Notifications</h2>
+            </div>
+            <div class="job-list-wrapper">
+                <div class="job-list-container" id="latestJobsList">
+                    <!-- Dynamic Content from Firebase -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-info">
+                    <a href="#" class="logo">
+                        <i class="fas fa-briefcase"></i> <span>ShivJobsPro</span>
+                    </a>
+                    <p>The most trusted platform for Government Job alerts in India. We provide fastest updates for every competitive exam.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Latest Jobs</a></li>
+                        <li><a href="#">Sarkari Result</a></li>
+                        <li><a href="#">Admit Card</a></li>
+                        <li><a href="#">Answer Key</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="pages/about.html">About Us</a></li>
+                        <li><a href="pages/contact.html">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Shiv Jobs Portal Pro. All rights reserved.</p>
+                <p>Designed with <i class="fas fa-heart text-danger"></i> for Job Seekers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="assets/js/firebase-config.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
+
+</body>
+</html>
