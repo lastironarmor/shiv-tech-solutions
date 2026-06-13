@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shiv Jobs Portal</title>
+
+<link rel="icon" href="data:,">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+
+background:#f5f5f5;
+
+}
+
+header{
+
+background:#004aad;
+color:white;
+padding:15px;
+position:sticky;
+top:0;
+z-index:999;
+
+}
+
+.logo{
+
+font-size:30px;
+font-weight:bold;
+text-align:center;
+
+}
+
+nav{
+
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:10px;
+margin-top:10px;
+
+}
+
+nav button{
+
+padding:8px 15px;
+border:none;
+background:white;
+color:#004aad;
+border-radius:5px;
+cursor:pointer;
+font-weight:bold;
+
+}
+
+nav button:hover{
+
+background:orange;
+color:white;
+
+}
+
+marquee{
+
+background:red;
+color:white;
+padding:8px;
+font-weight:bold;
+
+}
+
+.container{
+
+width:95%;
+max-width:1300px;
+margin:auto;
+padding:15px;
+
+}
+
+.search{
+
+margin:15px 0;
+
+}
+
+.search input{
+
+width:100%;
+padding:12px;
+font-size:16px;
+border-radius:5px;
+border:1px solid #ccc;
+
+}
+
+.cards{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:15px;
+
+}
+
+.card{
+
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,.1);
+
+}
+
+.card h3{
+
+color:#004aad;
+
+}
+
+.card p{
+
+margin-top:8px;
+
+}
+
+.card button{
+
+margin-top:10px;
+padding:8px 15px;
+background:#004aad;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+
+}
+
+.card button:hover{
+
+background:green;
+
+}
+
+footer{
+
+background:#222;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:30px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+
+Shiv Jobs Portal
+
+</div>
+
+<nav>
+
+<button>Home</button>
+
+<button>Latest Jobs</button>
+
+<button>Results</button>
+
+<button>Admit Card</button>
+
+<button>Syllabus</button>
+
+<button>Answer Key</button>
+
+</nav>
+
+</header>
+
+
+<marquee>
+
+🔥 Latest Government Jobs | Admit Card | Results | Free Job Alert | Shiv Jobs Portal 🔥
+
+</marquee>
+
+<div class="container">
+
+<div class="search">
+
+<input
+type="text"
+placeholder="Search Jobs..."
+id="search">
+
+</div>
+
+<div class="cards" id="jobs">
+
+</div>
+
+</div>
+
+<footer>
+
+© 2026 Shiv Jobs Portal
+
+</footer>
+
+<script>
+
+const jobs=[];
+// =======================
+// ADMIN SETTINGS
+// =======================
+
+const ADMIN_PASSWORD = "12345";
+
+let adminMode = false;
+
+// =======================
+// CREATE ADMIN BUTTON
+// =======================
+
+const adminBtn = document.createElement("button");
+
+adminBtn.innerHTML="🔒 Admin";
+
+adminBtn.style.position="fixed";
+adminBtn.style.bottom="20px";
+adminBtn.style.right="20px";
+adminBtn.style.background="#004aad";
+adminBtn.style.color="white";
+adminBtn.style.border="none";
+adminBtn.style.padding="10px 15px";
+adminBtn.style.borderRadius="50px";
+adminBtn.style.cursor="pointer";
+adminBtn.style.zIndex="9999";
+
+document.body.appendChild(adminBtn);
+
+// =======================
+// LOGIN
+// =======================
+
+adminBtn.onclick=function(){
+
+let pass=prompt("Enter Admin Password");
+
+if(pass===ADMIN_PASSWORD){
+
+adminMode=true;
+
+showAdminPanel();
+
+}else{
+
+alert("Wrong Password");
+
+}
+
+}
+
+// =======================
+// ADMIN PANEL
+// =======================
+
+function showAdminPanel(){
+
+const title=prompt("Job Title");
+
+if(!title) return;
+
+const dept=prompt("Department");
+
+const lastDate=prompt("Last Date");
+
+const qualification=prompt("Qualification");
+
+jobs.unshift({
+
+title,
+
+dept,
+
+lastDate,
+
+qualification
+
+});
+
+renderJobs();
+
+}
+
+// =======================
+// SHOW JOBS
+// =======================
+
+function renderJobs(){
+
+const box=document.getElementById("jobs");
+
+box.innerHTML="";
+
+jobs.forEach((job,index)=>{
+
+box.innerHTML+=`
+
+<div class="card">
+
+<h3>${job.title}</h3>
+
+<p><b>Department:</b> ${job.dept}</p>
+
+<p><b>Qualification:</b> ${job.qualification}</p>
+
+<p><b>Last Date:</b> ${job.lastDate}</p>
+
+<button onclick="viewJob(${index})">
+
+View Details
+
+</button>
+
+${adminMode?
+
+`<button
+style="background:red;margin-left:10px;"
+onclick="deleteJob(${index})">
+
+Delete
+
+</button>`
+
+:""}
+
+</div>
+
+`;
+
+});
+
+}
+
+// =======================
+// DELETE
+// =======================
+
+function deleteJob(i){
+
+if(confirm("Delete Job?")){
+
+jobs.splice(i,1);
+
+renderJobs();
+
+}
+
+}
+
+// =======================
+// VIEW
+// =======================
+
+function viewJob(i){
+
+alert(
+
+"Job : "+jobs[i].title+
+
+"\n\nDepartment : "+jobs[i].dept+
+
+"\n\nQualification : "+jobs[i].qualification+
+
+"\n\nLast Date : "+jobs[i].lastDate
+
+);
+
+}// ===========================
+// LOCAL STORAGE
+// ===========================
+
+function saveJobs(){
+
+localStorage.setItem(
+"shivJobs",
+JSON.stringify(jobs)
+);
+
+}
+
+function loadJobs(){
+
+const data=localStorage.getItem("shivJobs");
+
+if(data){
+
+jobs.length=0;
+
+JSON.parse(data).forEach(item=>{
+
+jobs.push(item);
+
+});
+
+}
+
+renderJobs();
+
+}
+
+window.onload=loadJobs;
+
+
+// ===========================
+// UPDATE renderJobs()
+// (Part 2 wali renderJobs()
+// ke END me sirf saveJobs()
+// add karna hai)
+// ===========================
+
+
+// Agar renderJobs() ke end me
+// saveJobs() nahi hai to
+// ye line add karo
+
+// saveJobs();
+
+
+// ===========================
+// LIVE SEARCH
+// ===========================
+
+document
+.getElementById("search")
+.addEventListener("keyup",function(){
+
+let value=this.value.toLowerCase();
+
+let cards=document.querySelectorAll(".card");
+
+cards.forEach(card=>{
+
+let text=card.innerText.toLowerCase();
+
+if(text.includes(value)){
+
+card.style.display="block";
+
+}else{
+
+card.style.display="none";
+
+}
+
+});
+
+});
+
+
+// ===========================
+// SAMPLE JOBS
+// (First Time)
+// ===========================
+
+if(localStorage.getItem("shivJobs")==null){
+
+jobs.push({
+
+title:"CG Police Constable 2026",
+
+dept:"Chhattisgarh Police",
+
+qualification:"10th / 12th",
+
+lastDate:"20 July 2026"
+
+});
+
+jobs.push({
+
+title:"Railway Group D Recruitment",
+
+dept:"Indian Railways",
+
+qualification:"10th Pass",
+
+lastDate:"15 August 2026"
+
+});
+
+jobs.push({
+
+title:"SSC MTS Recruitment",
+
+dept:"SSC",
+
+qualification:"10th Pass",
+
+lastDate:"30 July 2026"
+
+});
+
+saveJobs();
+
+renderJobs();
+
+}
+
+
+// ===========================
+// FEATURED LABEL
+// ===========================
+
+setTimeout(()=>{
+
+document
+.querySelectorAll(".card")
+.forEach((card,index)=>{
+
+if(index==0){
+
+let tag=document.createElement("div");
+
+tag.innerHTML="⭐ FEATURED";
+
+tag.style.background="green";
+
+tag.style.color="white";
+
+tag.style.padding="5px";
+
+tag.style.marginBottom="10px";
+
+tag.style.borderRadius="5px";
+
+card.prepend(tag);
+
+}
+
+});
+
+},500);// ==========================
+// HIDDEN ADMIN (7 LOGO CLICKS)
+// ==========================
+
+let logoClick = 0;
+
+document.querySelector(".logo").addEventListener("click", function(){
+
+logoClick++;
+
+if(logoClick>=7){
+
+logoClick=0;
+
+let pass=prompt("Enter Admin Password");
+
+if(pass===ADMIN_PASSWORD){
+
+adminMode=true;
+
+alert("Admin Mode Activated");
+
+renderJobs();
+
+}else{
+
+alert("Wrong Password");
+
+}
+
+}
+
+});
+
+
+// ==========================
+// LOGOUT
+// ==========================
+
+function logoutAdmin(){
+
+adminMode=false;
+
+renderJobs();
+
+}
+
+
+// ==========================
+// EDIT JOB
+// ==========================
+
+function editJob(i){
+
+let title=prompt("Job Title",jobs[i].title);
+
+if(title==null)return;
+
+let dept=prompt("Department",jobs[i].dept);
+
+if(dept==null)return;
+
+let qualification=prompt(
+
+"Qualification",
+
+jobs[i].qualification
+
+);
+
+if(qualification==null)return;
+
+let lastDate=prompt(
+
+"Last Date",
+
+jobs[i].lastDate
+
+);
+
+if(lastDate==null)return;
+
+jobs[i]={
+
+title,
+
+dept,
+
+qualification,
+
+lastDate
+
+};
+
+saveJobs();
+
+renderJobs();
+
+}
+
+
+// ==========================
+// UPDATE JOB CARDS
+// ==========================
+
+function renderJobs(){
+
+const box=document.getElementById("jobs");
+
+box.innerHTML="";
+
+jobs.forEach((job,index)=>{
+
+box.innerHTML+=`
+
+<div class="card">
+
+<h3>
+
+${job.title}
+
+</h3>
+
+<p>
+
+<b>Department :</b>
+
+${job.dept}
+
+</p>
+
+<p>
+
+<b>Qualification :</b>
+
+${job.qualification}
+
+</p>
+
+<p>
+
+<b>Last Date :</b>
+
+${job.lastDate}
+
+</p>
+
+<button onclick="viewJob(${index})">
+
+View Details
+
+</button>
+
+${
+adminMode?
+
+`
+
+<button
+onclick="editJob(${index})"
+style="background:orange;color:white;margin-left:5px;">
+
+Edit
+
+</button>
+
+<button
+onclick="deleteJob(${index})"
+style="background:red;color:white;margin-left:5px;">
+
+Delete
+
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+});
+
+saveJobs();
+
+}
+
+
+// ==========================
+// LOGOUT SHORTCUT
+// ==========================
+
+document.addEventListener("keydown",function(e){
+
+if(e.ctrlKey && e.key=="l"){
+
+logoutAdmin();
+
+alert("Admin Logged Out");
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>
