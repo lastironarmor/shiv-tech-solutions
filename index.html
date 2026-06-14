@@ -9,12 +9,7 @@
 
     <div class="bg-gray-900 p-8 rounded-3xl w-full max-w-sm border border-gray-800 shadow-2xl">
         <h2 id="title" class="text-2xl font-black mb-6 text-center">Login</h2>
-        
         <form id="auth-form" class="space-y-4">
-            <div id="name-box" class="hidden">
-                <label class="block text-xs font-bold text-gray-500 uppercase">Full Name</label>
-                <input type="text" id="reg-name" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700">
-            </div>
             <div>
                 <label class="block text-xs font-bold text-gray-500 uppercase">Email</label>
                 <input type="email" id="email" required class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700">
@@ -23,50 +18,37 @@
                 <label class="block text-xs font-bold text-gray-500 uppercase">Password</label>
                 <input type="password" id="pass" required class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700">
             </div>
-            <button type="submit" id="btn" class="w-full bg-indigo-600 hover:bg-indigo-700 p-3 rounded-xl font-bold transition">Login</button>
-            <p onclick="toggle()" class="text-center text-xs text-indigo-400 cursor-pointer underline hover:text-indigo-300">Switch to Register / Login</p>
+            <button type="submit" id="btn" class="w-full bg-indigo-600 p-3 rounded-xl font-bold">Login</button>
         </form>
     </div>
 
     <script>
-        let isLogin = true;
-        const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeburNLc2hGwXbV_i6qlJ-VS0CB9OI_tyA-EjpJcuY42MwK5g/formResponse";
-        const SHEET_WEB_APP = "https://script.google.com/macros/s/AKfycbwrX4vn_xXrXJoioF7JzpeuAQA9IuVSQ_nxdw5LAZWfZ0a17JBs74wUbrQ38c6xOFoYkQ/exec";
-
-        function toggle() {
-            isLogin = !isLogin;
-            document.getElementById('name-box').classList.toggle('hidden');
-            document.getElementById('title').innerText = isLogin ? 'Login' : 'Register';
-            document.getElementById('btn').innerText = isLogin ? 'Login' : 'Register';
-        }
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwrX4vn_xXrXJoioF7JzpeuAQA9IuVSQ_nxdw5LAZWfZ0a17JBs74wUbrQ38c6xOFoYkQ/exec";
 
         document.getElementById('auth-form').onsubmit = async (e) => {
             e.preventDefault();
-            const name = document.getElementById('reg-name').value;
             const email = document.getElementById('email').value.trim();
             const pass = document.getElementById('pass').value.trim();
+            const btn = document.getElementById('btn');
 
-            if (!isLogin) {
-                let fd = new FormData();
-                fd.append('entry.1289980302', name);
-                fd.append('entry.1236148094', email);
-                fd.append('entry.836205042', pass);
-                await fetch(FORM_URL, { method: 'POST', body: fd, mode: 'no-cors' });
-                alert("Registered! Please wait 10 seconds and Login.");
-            } else {
-                const res = await fetch(SHEET_WEB_APP);
+            btn.innerText = "Checking...";
+            
+            try {
+                const res = await fetch(WEB_APP_URL);
                 const data = await res.json();
                 
-                // C=2, D=3. Agar email/pass alag column me hai, numbers change karein
+                // यहाँ 2 का मतलब Email कॉलम और 3 का मतलब Password कॉलम है (Sheet के हिसाब से)
                 const user = data.find(row => row[2] == email && row[3] == pass);
                 
                 if (user) {
                     alert("Login Success! ✅");
-                    window.location.href = "https://www.google.com"; // Login ke baad kahan jana hai
                 } else {
-                    alert("Login Failed! Email ya Password check karein.");
+                    alert("Login Failed: Email ya Password galat hai.");
                 }
+            } catch (err) {
+                alert("Error: Server connect nahi ho pa raha. Check करें कि आपने 'Anyone' access सेट किया है या नहीं।");
             }
+            btn.innerText = "Login";
         };
     </script>
 </body>
