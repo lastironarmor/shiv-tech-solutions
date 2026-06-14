@@ -1,55 +1,1132 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <title>Shiv Login Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIV TECH - Job Notifications & Tech Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .ticker-wrap {
+            overflow: hidden;
+            width: 100%;
+        }
+        .ticker-move {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 25s linear infinite;
+        }
+        .ticker-move:hover {
+            animation-play-state: paused;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body class="bg-gray-950 flex items-center justify-center min-h-screen text-white p-4">
+<body class="bg-slate-50 text-slate-800 font-sans transition-colors duration-300 dark:bg-slate-900 dark:text-slate-100 min-h-screen pb-16 md:pb-0">
 
-    <div class="bg-gray-900 p-8 rounded-3xl w-full max-w-sm border border-gray-800 shadow-2xl">
-        <h2 id="title" class="text-2xl font-black mb-6 text-center">Login</h2>
-        <form id="auth-form" class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase">Email</label>
-                <input type="email" id="email" required class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700">
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase">Password</label>
-                <input type="password" id="pass" required class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700">
-            </div>
-            <button type="submit" id="btn" class="w-full bg-indigo-600 p-3 rounded-xl font-bold">Login</button>
-        </form>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 z-50 bg-slate-950 flex flex-col justify-center items-center transition-opacity duration-500">
+        <div class="relative w-24 h-24">
+            <div class="absolute inset-0 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="absolute inset-2 border-4 border-amber-500 border-b-transparent rounded-full animate-spin animate-reverse"></div>
+        </div>
+        <h2 class="text-white text-xl font-bold mt-4 tracking-wider">SHIV TECH</h2>
+        <p class="text-slate-400 text-sm mt-1">Loading Latest Updates...</p>
     </div>
 
-    <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwrX4vn_xXrXJoioF7JzpeuAQA9IuVSQ_nxdw5LAZWfZ0a17JBs74wUbrQ38c6xOFoYkQ/exec";
+    <!-- Ticker -->
+    <div class="bg-gradient-to-r from-amber-600 to-red-600 text-white text-sm font-medium py-2 px-4 shadow-md flex items-center z-40 relative">
+        <span class="bg-white text-red-700 text-xs font-black px-2 py-0.5 rounded animate-pulse mr-3 shrink-0 uppercase tracking-wider">Latest Update</span>
+        <div class="ticker-wrap flex-1">
+            <div id="ticker-container" class="ticker-move">
+                🔥 SSC CGL 2026 Notification Released: 25,000+ Vacancies, Apply Online Now! | UPSC Civil Services Prelims Exam Live Update | Active Matrix Synchronized with Google Sheets.
+            </div>
+        </div>
+    </div>
 
-        document.getElementById('auth-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const pass = document.getElementById('pass').value.trim();
-            const btn = document.getElementById('btn');
+    <!-- Header -->
+    <header class="sticky top-0 z-30 glass border-b border-slate-200/50 dark:border-slate-700/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer select-none" id="logo-trigger">
+                <div class="bg-gradient-to-tr from-brand-600 to-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-brand-500/20">
+                    <i class="fa-solid fa-code text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black bg-gradient-to-r from-brand-600 to-indigo-600 dark:from-brand-400 dark:to-indigo-400 bg-clip-text text-transparent tracking-tight">SHIV</span>
+                    <span class="text-xl font-bold text-slate-800 dark:text-white">TECH</span>
+                </div>
+            </div>
 
-            btn.innerText = "Checking...";
+            <nav class="hidden md:flex items-center gap-6 font-semibold text-sm text-slate-600 dark:text-slate-300">
+                <a href="#" class="text-brand-600 dark:text-brand-400 hover:text-brand-700 transition">Home</a>
+                <a href="#categories-section" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Categories</a>
+                <a href="#jobs-section" class="hover:text-brand-600 dark:hover:text-brand-400 transition">All Notifications</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all shadow-sm" title="Toggle Theme">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+                </button>
+                
+                <div class="relative">
+                    <button id="notif-btn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all shadow-sm">
+                        <i class="fa-solid fa-bell"></i>
+                        <span id="notif-badge" class="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
+                    </button>
+                    <div id="notif-panel" class="hidden absolute right-0 mt-3 w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl overflow-hidden z-50">
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-700 font-bold flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+                            <span>Latest Alerts</span>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto" id="notif-list"></div>
+                    </div>
+                </div>
+
+                <div id="admin-indicator" class="hidden flex items-center gap-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold px-3 py-2 rounded-xl border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                    Admin Active
+                    <button onclick="logoutAdmin()" class="ml-1 text-slate-400 hover:text-rose-500"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-12">
+
+        <!-- Admin Control Centre Dashboard Section -->
+        <section id="admin-dashboard" class="hidden transition-all duration-300 p-6 rounded-3xl bg-slate-900 text-white shadow-2xl relative overflow-hidden border border-slate-800">
+            <div class="absolute -right-16 -top-16 w-48 h-48 bg-brand-600/20 rounded-full blur-3xl"></div>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
+                <div>
+                    <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200"><i class="fa-solid fa-sliders mr-2"></i>Shiv Tech Control Centre</h2>
+                    <p class="text-xs text-slate-400 mt-1">Manage notifications, edit banner sliders, and update secure keys live.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="openPostModal()" class="bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5"><i class="fa-solid fa-plus text-sm"></i> Add New Notification</button>
+                    <button onclick="openPasswordModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5"><i class="fa-solid fa-key"></i> Change Password</button>
+                    <button onclick="loadPostsFromSheet()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5"><i class="fa-solid fa-rotate"></i> Refresh Sheet</button>
+                    <button onclick="logoutAdmin()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 border border-rose-500/30 font-bold text-xs px-4 py-2.5 rounded-xl transition"><i class="fa-solid fa-lock"></i> Exit</button>
+                </div>
+            </div>
             
-            try {
-                const res = await fetch(WEB_APP_URL);
-                const data = await res.json();
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Records</div>
+                    <div class="text-3xl font-black mt-1 text-slate-100" id="stat-total-posts">0</div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider text-emerald-400">Live Published</div>
+                    <div class="text-3xl font-black mt-1 text-emerald-400" id="stat-published-posts">0</div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider text-amber-400">Hidden / Draft</div>
+                    <div class="text-3xl font-black mt-1 text-amber-400" id="stat-hidden-posts">0</div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-800 p-4 rounded-2xl">
+                    <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider text-purple-400">Pinned / Featured</div>
+                    <div class="text-3xl font-black mt-1 text-purple-400" id="stat-featured-posts">0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hero Banner Section -->
+        <section class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-brand-950 text-white">
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
+
+            <div id="hero-slider" class="relative min-h-[380px] flex flex-col justify-center p-6 sm:p-12 lg:p-16">
+                <div class="max-w-2xl relative z-10 space-y-6" id="hero-slide-content">
+                    <!-- Dynamic content injected here -->
+                </div>
                 
-                // यहाँ 2 का मतलब Email कॉलम और 3 का मतलब Password कॉलम है (Sheet के हिसाब से)
-                const user = data.find(row => row[2] == email && row[3] == pass);
+                <div id="banner-edit-controls" class="hidden mt-4 z-20 relative">
+                    <button onclick="openBannerEditModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-2 transition shadow-lg">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit Banner Text
+                    </button>
+                </div>
+
+                <div class="absolute bottom-6 right-6 flex gap-2 z-20">
+                    <button onclick="switchSlide(0)" class="w-8 h-2 rounded-full bg-white transition-all slider-dot"></button>
+                    <button onclick="switchSlide(1)" class="w-2 h-2 rounded-full bg-white/40 transition-all slider-dot"></button>
+                    <button onclick="switchSlide(2)" class="w-2 h-2 rounded-full bg-white/40 transition-all slider-dot"></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section class="space-y-6">
+            <div class="glass border border-slate-200/60 dark:border-slate-700/60 shadow-xl rounded-3xl p-4 sm:p-6 transition-all">
+                <div class="flex flex-col lg:flex-row items-stretch gap-4">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" id="search-input" oninput="executeSearchFilter()" placeholder="Search notifications by keyword..." class="w-full bg-slate-100 dark:bg-slate-800/80 border-0 focus:ring-2 focus:ring-brand-500 rounded-2xl pl-12 pr-4 py-4 font-medium placeholder-slate-400 dark:placeholder-slate-500 transition-all text-sm">
+                    </div>
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 lg:pb-0" id="filter-chips-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section id="categories-section" class="space-y-4">
+            <div>
+                <h3 class="text-xl font-extrabold tracking-tight">Streamlined Matrices</h3>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div onclick="selectCategoryChip('SSC')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 text-center space-y-2 hover:-translate-y-1 transition-all">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl"><i class="fa-solid fa-building-user"></i></div>
+                    <div class="font-bold text-xs">SSC Portfolios</div>
+                </div>
+                <div onclick="selectCategoryChip('Railway')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 text-center space-y-2 hover:-translate-y-1 transition-all">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl"><i class="fa-solid fa-train"></i></div>
+                    <div class="font-bold text-xs">Rail Logistics</div>
+                </div>
+                <div onclick="selectCategoryChip('Police')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 text-center space-y-2 hover:-translate-y-1 transition-all">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="font-bold text-xs">Law Enforcement</div>
+                </div>
+                <div onclick="selectCategoryChip('Bank')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 text-center space-y-2 hover:-translate-y-1 transition-all">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl"><i class="fa-solid fa-vault"></i></div>
+                    <div class="font-bold text-xs">Banking Sectors</div>
+                </div>
+                <div onclick="selectCategoryChip('UPSC')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 text-center space-y-2 hover:-translate-y-1 transition-all">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-rose-100 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl"><i class="fa-solid fa-crown"></i></div>
+                    <div class="font-bold text-xs">UPSC Services</div>
+                </div>
+                <div onclick="selectCategoryChip('State Jobs')" class="group cursor-pointer p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 text-center space-y-2 hover:-translate-y-1 transition-all">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-indigo-100 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <div class="font-bold text-xs">State Domestics</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Active Opportunities Section -->
+        <section id="jobs-section" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h3 class="text-2xl font-black tracking-tight" id="jobs-heading-text">Active Opportunities</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="sort-filter" onchange="executeSearchFilter()" class="bg-white dark:bg-slate-800 text-xs font-semibold px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-1 focus:ring-brand-500">
+                        <option value="default">Default Sort Order</option>
+                        <option value="date-asc">Closing Date (Soonest First)</option>
+                        <option value="date-desc">Closing Date (Furthest First)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Job Grid Target Container (image_1d621f.png स्टाइल के साथ) -->
+            <div id="jobs-grid-target" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+            <div id="jobs-empty-state" class="hidden text-center py-16 bg-white dark:bg-slate-800/40 border border-dashed border-slate-200 dark:border-slate-700 rounded-3xl max-w-md mx-auto p-6 space-y-3">
+                <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 text-2xl mx-auto"><i class="fa-solid fa-folder-open"></i></div>
+                <h4 class="font-bold text-base">No Data Matches Query</h4>
+                <button onclick="clearAllFilters()" class="text-xs bg-brand-600 text-white font-bold px-4 py-2 rounded-xl">Clear System Restraints</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-white mt-16 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-xs text-slate-500">
+            <div>&copy; 2026 SHIV TECH Architecture. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky Menu -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex justify-around items-center">
+        <a href="#" class="flex flex-col items-center gap-0.5 text-brand-600 dark:text-brand-400">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] font-bold">Home</span>
+        </a>
+        <a href="#categories-section" class="flex flex-col items-center gap-0.5 text-slate-400">
+            <i class="fa-solid fa-grip text-lg"></i>
+            <span class="text-[10px] font-medium">Categories</span>
+        </a>
+        <button onclick="triggerAdminFloatingAction()" class="flex flex-col items-center gap-0.5 text-slate-400">
+            <i class="fa-solid fa-lock text-lg"></i>
+            <span class="text-[10px] font-medium">Admin</span>
+        </button>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-auth-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4 relative">
+            <button onclick="closeAdminAuthModal()" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 bg-amber-100 dark:bg-amber-950/50 text-amber-600 text-xl rounded-2xl flex items-center justify-center mx-auto"><i class="fa-solid fa-shield-halved"></i></div>
+                <h4 class="font-black text-lg tracking-tight">Secure Access Clearance</h4>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-500 uppercase">Enter Admin Passcode</label>
+                <input type="password" id="admin-passcode-field" placeholder="••••••••" class="w-full bg-slate-100 dark:bg-slate-900 border-0 focus:ring-2 focus:ring-brand-500 rounded-xl px-4 py-3 text-center text-lg tracking-widest font-black">
+                <p id="admin-auth-error" class="hidden text-rose-500 text-xs font-semibold text-center mt-1">Passcode invalid. Verification denied.</p>
+            </div>
+            <button onclick="verifyAdminPasscode()" class="w-full bg-slate-900 dark:bg-brand-600 text-white font-bold py-3 rounded-xl shadow-lg">Authorize Key</button>
+        </div>
+    </div>
+
+    <!-- Password Change Modal -->
+    <div id="password-change-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4 relative">
+            <button onclick="closePasswordModal()" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="text-center">
+                <h4 class="font-black text-lg tracking-tight"><i class="fa-solid fa-key mr-2 text-amber-500"></i>Change Admin Passcode</h4>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-slate-500 block mb-1">Current Passcode</label>
+                    <input type="password" id="old-passcode-field" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 block mb-1">New Passcode</label>
+                    <input type="password" id="new-passcode-field" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                </div>
+                <p id="password-error" class="hidden text-rose-500 text-center font-semibold">Incorrect current passcode.</p>
+                <p id="password-success" class="hidden text-emerald-500 text-center font-semibold">Passcode successfully updated!</p>
+            </div>
+            <button onclick="saveNewPassword()" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl shadow-md">Update Passcode</button>
+        </div>
+    </div>
+
+    <!-- Banner Edit Modal -->
+    <div id="banner-edit-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-lg rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeBannerEditModal()" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h4 class="font-black text-xl mb-4 text-amber-500">Modify Hero Slides Content</h4>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="font-bold uppercase text-slate-400 block mb-1">Slide 1 Title</label>
+                    <input type="text" id="edit-slide0-title" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2">
+                    <label class="font-bold uppercase text-slate-400 block mt-2 mb-1">Slide 1 Description</label>
+                    <textarea id="edit-slide0-desc" rows="2" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2"></textarea>
+                </div>
+                <hr class="border-slate-700">
+                <div>
+                    <label class="font-bold uppercase text-slate-400 block mb-1">Slide 2 Title</label>
+                    <input type="text" id="edit-slide1-title" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2">
+                    <label class="font-bold uppercase text-slate-400 block mt-2 mb-1">Slide 2 Description</label>
+                    <textarea id="edit-slide1-desc" rows="2" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2"></textarea>
+                </div>
+                <hr class="border-slate-700">
+                <div>
+                    <label class="font-bold uppercase text-slate-400 block mb-1">Slide 3 Title</label>
+                    <input type="text" id="edit-slide2-title" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2">
+                    <label class="font-bold uppercase text-slate-400 block mt-2 mb-1">Slide 3 Description</label>
+                    <textarea id="edit-slide2-desc" rows="2" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-4">
+                <button onclick="closeBannerEditModal()" class="bg-slate-200 dark:bg-slate-700 px-4 py-2 rounded-xl text-xs font-bold">Cancel</button>
+                <button onclick="saveBannerTexts()" class="bg-brand-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Editor Modal WITH LIVE GUIDE MATRIX INPUTS -->
+    <div id="post-editor-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-2xl rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closePostModal()" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h4 id="editor-modal-title" class="font-black text-xl mb-4 text-brand-600">Add New Notification Entity</h4>
+            
+            <form id="editor-form" onsubmit="savePostFormEntity(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="edit-entity-id">
                 
-                if (user) {
-                    alert("Login Success! ✅");
-                } else {
-                    alert("Login Failed: Email ya Password galat hai.");
-                }
-            } catch (err) {
-                alert("Error: Server connect nahi ho pa raha. Check करें कि आपने 'Anyone' access सेट किया है या नहीं।");
-            }
-            btn.innerText = "Login";
+                <!-- General Info -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold text-slate-500 uppercase block mb-1">Notification Headline Title *</label>
+                        <input type="text" id="form-title" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-500 uppercase block mb-1">Department / Board Agency *</label>
+                        <input type="text" id="form-dept" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="font-bold text-slate-500 uppercase block mb-1">Category Track *</label>
+                        <select id="form-category" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                            <option value="SSC">SSC</option>
+                            <option value="Railway">Railway</option>
+                            <option value="Police">Police</option>
+                            <option value="Bank">Bank</option>
+                            <option value="UPSC">UPSC</option>
+                            <option value="State Jobs">State Jobs</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-500 uppercase block mb-1">Target Qualification *</label>
+                        <input type="text" id="form-qual" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-500 uppercase block mb-1">Closing Last Date *</label>
+                        <input type="date" id="form-date" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                    </div>
+                </div>
+
+                <!-- Guide Matrix Extra Sub-Fields -->
+                <div class="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 space-y-3">
+                    <div class="font-black text-xs text-brand-600 dark:text-brand-400 flex items-center gap-1.5 uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-table-cells"></i> Guide Matrix Custom Table Content
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="font-bold text-slate-400 uppercase block mb-1">Advertisement No.</label>
+                            <input type="text" id="form-advt" placeholder="e.g., 2381/JP/Bharti/2026" class="w-full bg-white dark:bg-slate-800 border-0 rounded-xl px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-400 uppercase block mb-1">Salary Scale Range</label>
+                            <input type="text" id="form-salary" placeholder="e.g., Rs. 36,168 - 39,488/-" class="w-full bg-white dark:bg-slate-800 border-0 rounded-xl px-3 py-2">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="font-bold text-slate-400 uppercase block mb-1">Age Limits Parameters</label>
+                            <input type="text" id="form-age" placeholder="e.g., Min: 21, Max: 35" class="w-full bg-white dark:bg-slate-800 border-0 rounded-xl px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-400 uppercase block mb-1">Application Mode</label>
+                            <input type="text" id="form-mode" placeholder="e.g., Online Matrix" class="w-full bg-white dark:bg-slate-800 border-0 rounded-xl px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-400 uppercase block mb-1">Job Allocation Type</label>
+                            <input type="text" id="form-jobtype" placeholder="e.g., Permanent" class="w-full bg-white dark:bg-slate-800 border-0 rounded-xl px-3 py-2">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold text-slate-500 uppercase block mb-1">Direct Apply Router Link *</label>
+                        <input type="url" id="form-apply" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-500 uppercase block mb-1">Official Dossier Notice URL *</label>
+                        <input type="url" id="form-details" required class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="font-bold text-slate-500 uppercase block mb-1">Comprehensive Description</label>
+                    <textarea id="form-desc" rows="3" class="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl px-4 py-2.5"></textarea>
+                </div>
+                
+                <div class="bg-slate-50 dark:bg-slate-900/40 p-4 rounded-2xl grid grid-cols-3 gap-4 border border-slate-100 dark:border-slate-800">
+                    <label class="flex items-center gap-2 font-bold cursor-pointer"><input type="checkbox" id="form-published" checked class="rounded text-brand-600 bg-slate-200 border-0"> <span>Publish Live</span></label>
+                    <label class="flex items-center gap-2 font-bold cursor-pointer"><input type="checkbox" id="form-featured" class="rounded text-brand-600 bg-slate-200 border-0"> <span>Featured</span></label>
+                    <label class="flex items-center gap-2 font-bold cursor-pointer"><input type="checkbox" id="form-pinned" class="rounded text-brand-600 bg-slate-200 border-0"> <span>Pin to Top</span></label>
+                </div>
+                
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closePostModal()" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold px-5 py-2.5 rounded-xl">Cancel</button>
+                    <button type="submit" class="bg-brand-600 text-white font-bold px-6 py-2.5 rounded-xl shadow-md">Save Database Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Customer Application Form Modal -->
+    <div id="customer-apply-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 relative">
+            <button onclick="closeCustomerApplyModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="space-y-1">
+                <div class="w-12 h-12 bg-brand-100 dark:bg-brand-950 text-brand-600 text-xl rounded-2xl flex items-center justify-center"><i class="fa-solid fa-file-signature"></i></div>
+                <h4 class="font-black text-xl tracking-tight text-slate-900 dark:text-white">Apply for Position</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Please provide your authentic details to register your application.</p>
+            </div>
+            <form id="customer-google-form" onsubmit="submitApplicationToGoogle(event)" class="space-y-3 text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <!-- FIXED: यहाँ अब असली Post ID आएगी -->
+                        <label class="font-bold text-slate-400 uppercase block mb-1">Post ID</label>
+                        <input type="text" id="cust-post-id" readonly class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 font-bold text-slate-600 dark:text-slate-300 cursor-not-allowed">
+                    </div>
+                    <div>
+                        <!-- FIXED: यहाँ अब असली Job Title दिखेगा -->
+                        <label class="font-bold text-slate-400 uppercase block mb-1">Job Title</label>
+                        <input type="text" id="cust-post-title" readonly class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 font-bold text-slate-600 dark:text-slate-300 cursor-not-allowed">
+                    </div>
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Your Full Name *</label>
+                    <input type="text" id="cust-name" required placeholder="Enter your full name" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 rounded-xl px-4 py-2.5 font-medium text-slate-900 dark:text-white">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Email Address *</label>
+                    <input type="email" id="cust-email" required placeholder="name@example.com" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 rounded-xl px-4 py-2.5 font-medium text-slate-900 dark:text-white">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Phone Number *</label>
+                    <input type="tel" id="cust-phone" required placeholder="Enter 10 digit mobile number" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 rounded-xl px-4 py-2.5 font-medium text-slate-900 dark:text-white">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-lg transition duration-150 flex items-center justify-center gap-2 text-sm mt-4">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Application Matrix
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Detail View Modal -->
+    <div id="detail-view-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full max-w-2xl rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-6">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <div class="space-y-2">
+                <span id="dt-badge" class="inline-block bg-brand-500/10 text-brand-600 dark:text-brand-400 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">CATEGORY</span>
+                <h3 id="dt-title" class="text-xl sm:text-2xl font-black tracking-tight leading-tight">Job Title Placement</h3>
+                <p id="dt-dept" class="text-xs font-bold text-slate-500 dark:text-slate-400">Board / Department Agency Name</p>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+                <div class="space-y-0.5">
+                    <div class="text-[10px] uppercase font-bold text-slate-400">Qualification</div>
+                    <div id="dt-qual" class="text-xs font-black">N/A</div>
+                </div>
+                <div class="space-y-0.5">
+                    <div class="text-[10px] uppercase font-bold text-slate-400">Closing Date</div>
+                    <div id="dt-date" class="text-xs font-black text-rose-500">N/A</div>
+                </div>
+                <div class="space-y-0.5">
+                    <div class="text-[10px] uppercase font-bold text-slate-400">Job Type</div>
+                    <div id="dt-jobtype" class="text-xs font-black">Permanent</div>
+                </div>
+                <div class="space-y-0.5">
+                    <div class="text-[10px] uppercase font-bold text-slate-400">Apply Mode</div>
+                    <div id="dt-mode" class="text-xs font-black text-emerald-500">Online Matrix</div>
+                </div>
+            </div>
+
+            <!-- Detailed Technical Spec Grid Row Table -->
+            <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden text-xs">
+                <div class="grid grid-cols-3 bg-slate-100 dark:bg-slate-900 font-bold p-2.5 border-b border-slate-200 dark:border-slate-700">
+                    <div>Matrix Element</div>
+                    <div class="col-span-2">Clearance Threshold Parameters</div>
+                </div>
+                <div class="grid grid-cols-3 p-2.5 border-b border-slate-100 dark:border-slate-800/60">
+                    <div class="font-semibold text-slate-400">Advertisement No.</div>
+                    <div id="dt-advt" class="col-span-2 font-medium">Loading Track...</div>
+                </div>
+                <div class="grid grid-cols-3 p-2.5 border-b border-slate-100 dark:border-slate-800/60">
+                    <div class="font-semibold text-slate-400">Salary scale</div>
+                    <div id="dt-salary" class="col-span-2 font-medium text-amber-500">Loading Track...</div>
+                </div>
+                <div class="grid grid-cols-3 p-2.5">
+                    <div class="font-semibold text-slate-400">Age Limits</div>
+                    <div id="dt-age" class="col-span-2 font-medium">Loading Track...</div>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <h5 class="text-xs font-black uppercase tracking-wider text-slate-400">Dossier Overview Details</h5>
+                <p id="dt-desc" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">No extended logs provided.</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-2 pt-2 border-t border-slate-100 dark:border-slate-700">
+                <button id="dt-apply-btn" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow-md flex items-center justify-center gap-1.5"><i class="fa-solid fa-paper-plane"></i> Register Application Matrix</button>
+                <a id="dt-details-link" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-center text-slate-800 dark:text-slate-200 font-bold py-3 rounded-xl text-xs sm:text-sm border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> Download Official Notice Dossier</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE JAVASCRIPT SYSTEM ENGINE -->
+    <script>
+        // GOOGLE SCRIPT WEB APP INTEGRATION URL
+        const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxUs5rPvHc0rSfsuc7jfmRs_giFQLPZZXDm-Isv2UcPe7IGCvmJICzZXpssyIG44hrO/exec";
+        const DEFAULT_PASSCODE = "1234"; 
+
+        // System Application State
+        let appState = {
+            posts: [],
+            isAdmin: false,
+            currentCategoryFilter: null,
+            activeSlideIdx: 0
         };
+
+        const heroSlidesData = [
+            { badge: "Shiv Tech Deployment", title: "Live Tracking System Activated", desc: "All public job recruitment programs and technical examination indices are directly fetched from Google Cloud Server Matrix." },
+            { badge: "Central Portfolios", title: "SSC CGL Recruitment Gateway", desc: "Access the tier frameworks, online dossiers, and custom table trackers for 25,000 administrative posts." },
+            { badge: "UPSC Executive Services", title: "Civil Services Dossier mobilization", desc: "Track premium group A administrative careers, direct recruitment notice links, and threshold qualification sheets." }
+        ];
+
+        window.onload = function() {
+            if (localStorage.getItem('shiv_theme') === 'dark' || (!localStorage.getItem('shiv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            
+            if (sessionStorage.getItem('shiv_admin_logged') === 'true') {
+                activateAdminPrivileges();
+            }
+
+            switchSlide(0);
+            renderFilterChips();
+            loadPostsFromSheet();
+
+            document.getElementById('theme-toggle').onclick = () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('shiv_theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('shiv_theme', 'dark');
+                }
+            };
+
+            document.getElementById('logo-trigger').onclick = () => {
+                triggerAdminFloatingAction();
+            };
+
+            document.getElementById('notif-btn').onclick = (e) => {
+                e.stopPropagation();
+                document.getElementById('notif-panel').classList.toggle('hidden');
+                document.getElementById('notif-badge').classList.add('hidden');
+            };
+            document.onclick = () => {
+                document.getElementById('notif-panel').classList.add('hidden');
+            };
+        };
+
+        // FETCH DATA FROM GOOGLE SHEETS
+        async function loadPostsFromSheet() {
+            showLoadingScreen(true);
+            try {
+                const res = await fetch(SHEET_API_URL);
+                const data = await res.json();
+                appState.posts = (Array.isArray(data) && data.length > 0) ? data : [];
+                
+                executeSearchFilter();
+                updateDashboardStatistics();
+                populateNotificationAlertsPanel();
+            } catch (err) {
+                console.error("Critical System Data Fetch Fault:", err);
+                appState.posts = [];
+                executeSearchFilter();
+            } finally {
+                showLoadingScreen(false); 
+            }
+        }
+
+        function showLoadingScreen(show) {
+            const screen = document.getElementById('loading-screen');
+            if(show) {
+                screen.classList.remove('opacity-0');
+                screen.classList.remove('pointer-events-none');
+            } else {
+                screen.classList.add('opacity-0');
+                screen.classList.add('pointer-events-none');
+            }
+        }
+
+        // RENDER ACTIVE SYSTEM OPPORTUNITIES GRID (image_1d621f.png स्टाइल)
+        function renderActiveOpportunities() {
+            const grid = document.getElementById('jobs-grid-target');
+            const emptyState = document.getElementById('jobs-empty-state');
+            grid.innerHTML = "";
+
+            const renderedList = appState.filteredPosts || appState.posts;
+            const visibleItems = renderedList.filter(p => appState.isAdmin || p.published === true || p.published === "true");
+
+            if (visibleItems.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            visibleItems.forEach(post => {
+                const isPinned = post.pinned === true || post.pinned === "true";
+                const isFeatured = post.featured === true || post.featured === "true";
+                const isDraft = !(post.published === true || post.published === "true");
+
+                const card = document.createElement('div');
+                // FIXED: यहाँ image_1d621f.png जैसी प्रीमियम डार्क स्टाइलिंग (bg-slate-900 / dark UI लुक) सेट की गई है
+                card.className = `bg-[#131c2e] text-white rounded-3xl border ${isPinned ? 'border-amber-500 shadow-amber-500/5 ring-1 ring-amber-500/30' : 'border-slate-800'} p-6 flex flex-col justify-between space-y-5 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 relative group overflow-hidden`;
+                
+                let pinnedBadge = "";
+                if (isPinned) {
+                    pinnedBadge = `<div class="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-amber-600 text-white text-[9px] font-black uppercase px-3 py-1 rounded-bl-xl shadow flex items-center gap-1"><i class="fa-solid fa-thumbtack text-[8px]"></i> PINNED</div>`;
+                }
+
+                let adminManagementRow = "";
+                if (appState.isAdmin) {
+                    adminManagementRow = `
+                        <div class="flex items-center gap-1.5 border-t border-slate-800 pt-3 mt-1">
+                            <button onclick="event.stopPropagation(); populateEditEntityField('${post.id}')" class="flex-1 bg-slate-800 hover:bg-brand-500 hover:text-white text-[11px] font-bold py-1.5 rounded-xl transition"><i class="fa-solid fa-pen-to-square"></i> Modify</button>
+                            <button onclick="event.stopPropagation(); fireDeleteEntityRequest('${post.id}')" class="bg-rose-500/10 hover:bg-rose-600 text-rose-500 hover:text-white border border-rose-500/20 px-2.5 py-1.5 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    ${pinnedBadge}
+                    <div class="space-y-4 cursor-pointer" onclick="openDetailViewModal('${post.id}')">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="bg-slate-800 text-slate-300 text-xs font-bold px-3 py-1 rounded-xl uppercase tracking-wider">${post.category}</span>
+                            <div class="flex items-center gap-3 text-slate-400 text-sm">
+                                <i class="fa-regular fa-bookmark hover:text-brand-400 transition cursor-pointer"></i>
+                                <i class="fa-solid fa-share-nodes hover:text-brand-400 transition cursor-pointer"></i>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="font-black text-xl text-slate-100 tracking-tight leading-tight group-hover:text-brand-400 transition-colors">${post.title}</h4>
+                            <p class="text-xs text-brand-500 font-bold flex items-center gap-1.5"><i class="fa-solid fa-building text-[10px]"></i> ${post.department}</p>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">${post.description || 'No summary overview details provided for this operational career path.'}</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 pt-2 border-t border-slate-800/60">
+                            <div class="space-y-0.5">
+                                <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Qualification</div>
+                                <div class="text-xs font-black text-slate-200 truncate">${post.qualification}</div>
+                            </div>
+                            <div class="space-y-0.5">
+                                <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Closing Window</div>
+                                <div class="text-xs font-black text-rose-400 flex items-center gap-1"><i class="fa-regular fa-calendar text-[10px]"></i> ${post.lastDate}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-2 pt-2">
+                        <div class="flex gap-2.5 text-xs">
+                            <button onclick="event.stopPropagation(); openDetailViewModal('${post.id}')" class="flex-1 bg-slate-800/80 hover:bg-slate-800 text-slate-200 font-black py-3 rounded-2xl transition border border-slate-700/50 flex items-center justify-center gap-1.5"><i class="fa-solid fa-circle-info text-slate-400"></i> Guide Matrix</button>
+                            <button onclick="event.stopPropagation(); openCustomerApplyModal('${post.id}', '${post.title}')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-black py-3 rounded-2xl transition shadow-xl shadow-brand-600/20 flex items-center justify-center gap-1">Apply Now <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i></button>
+                        </div>
+                        ${adminManagementRow}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // FILTER AND SEARCH HANDLING SYSTEM
+        function executeSearchFilter() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const sort = document.getElementById('sort-filter').value;
+
+            let result = [...appState.posts];
+
+            if (appState.currentCategoryFilter) {
+                result = result.filter(p => p.category === appState.currentCategoryFilter);
+            }
+
+            if (query !== "") {
+                result = result.filter(p => 
+                    p.title.toLowerCase().includes(query) ||
+                    p.department.toLowerCase().includes(query) ||
+                    p.description.toLowerCase().includes(query) ||
+                    p.category.toLowerCase().includes(query)
+                );
+            }
+
+            if (sort === "date-asc") {
+                result.sort((a, b) => new Date(a.lastDate) - new Date(b.lastDate));
+            } else if (sort === "date-desc") {
+                result.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate));
+            } else {
+                result.sort((a, b) => {
+                    const pinA = a.pinned === true || a.pinned === "true" ? 1 : 0;
+                    const pinB = b.pinned === true || b.pinned === "true" ? 1 : 0;
+                    return pinB - pinA;
+                });
+            }
+
+            appState.filteredPosts = result;
+            renderActiveOpportunities();
+            updateJobsHeadingText();
+        }
+
+        function selectCategoryChip(catName) {
+            appState.currentCategoryFilter = appState.currentCategoryFilter === catName ? null : catName;
+            renderFilterChips();
+            executeSearchFilter();
+        }
+
+        function renderFilterChips() {
+            const container = document.getElementById('filter-chips-container');
+            container.innerHTML = "";
+            const distinctCategories = ['SSC', 'Railway', 'Police', 'Bank', 'UPSC', 'State Jobs'];
+
+            distinctCategories.forEach(cat => {
+                const isSelected = appState.currentCategoryFilter === cat;
+                const chip = document.createElement('button');
+                chip.onclick = () => selectCategoryChip(cat);
+                chip.className = `px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition-all border ${isSelected ? 'bg-brand-600 border-brand-600 text-white shadow-md' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'}`;
+                chip.textContent = cat;
+                container.appendChild(chip);
+            });
+        }
+
+        function updateJobsHeadingText() {
+            const text = document.getElementById('jobs-heading-text');
+            text.textContent = appState.currentCategoryFilter ? `${appState.currentCategoryFilter} Matrix Opportunities` : "Active Opportunities";
+        }
+
+        function clearAllFilters() {
+            document.getElementById('search-input').value = "";
+            appState.currentCategoryFilter = null;
+            document.getElementById('sort-filter').value = "default";
+            renderFilterChips();
+            executeSearchFilter();
+        }
+
+        // ADMIN ACCESS CORE MATRIX
+        function openAdminAuthModal() { document.getElementById('admin-auth-modal').classList.remove('hidden'); }
+        function closeAdminAuthModal() {
+            document.getElementById('admin-auth-modal').classList.add('hidden');
+            document.getElementById('admin-auth-error').classList.add('hidden');
+            document.getElementById('admin-passcode-field').value = "";
+        }
+
+        function verifyAdminPasscode() {
+            const val = document.getElementById('admin-passcode-field').value;
+            const livePass = localStorage.getItem('shiv_tech_key') || DEFAULT_PASSCODE;
+
+            if (val === livePass) {
+                sessionStorage.setItem('shiv_admin_logged', 'true');
+                activateAdminPrivileges();
+                closeAdminAuthModal();
+            } else {
+                document.getElementById('admin-auth-error').classList.remove('hidden');
+            }
+        }
+
+        function activateAdminPrivileges() {
+            appState.isAdmin = true;
+            document.getElementById('admin-indicator').classList.remove('hidden');
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            document.getElementById('banner-edit-controls').classList.remove('hidden');
+            renderActiveOpportunities();
+            updateDashboardStatistics();
+        }
+
+        function logoutAdmin() {
+            appState.isAdmin = false;
+            sessionStorage.removeItem('shiv_admin_logged');
+            document.getElementById('admin-indicator').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('banner-edit-controls').classList.add('hidden');
+            renderActiveOpportunities();
+        }
+
+        function updateDashboardStatistics() {
+            if(!appState.isAdmin) return;
+            const posts = appState.posts;
+            document.getElementById('stat-total-posts').textContent = posts.length;
+            document.getElementById('stat-published-posts').textContent = posts.filter(p => p.published === true || p.published === "true").length;
+            document.getElementById('stat-hidden-posts').textContent = posts.filter(p => !(p.published === true || p.published === "true")).length;
+            document.getElementById('stat-featured-posts').textContent = posts.filter(p => p.featured === true || p.featured === "true" || p.pinned === true || p.pinned === "true").length;
+        }
+
+        // SAVE / ADD / EDIT ENGINE WITH GOOGLE SHEET WRITE BACK
+        async function savePostFormEntity(e) {
+            e.preventDefault();
+            
+            let id = document.getElementById('edit-entity-id').value;
+            if(!id) id = "notif-" + Date.now();
+
+            const entityPackage = {
+                action: "add",
+                id: id,
+                title: document.getElementById('form-title').value,
+                department: document.getElementById('form-dept').value,
+                category: document.getElementById('form-category').value,
+                qualification: document.getElementById('form-qual').value,
+                lastDate: document.getElementById('form-date').value,
+                advtNo: document.getElementById('form-advt').value || "N/A",
+                salary: document.getElementById('form-salary').value || "As per norms",
+                ageLimit: document.getElementById('form-age').value || "N/A",
+                applyMode: document.getElementById('form-mode').value || "Online Matrix",
+                jobType: document.getElementById('form-jobtype').value || "Permanent",
+                applyUrl: document.getElementById('form-apply').value,
+                detailsUrl: document.getElementById('form-details').value,
+                description: document.getElementById('form-desc').value || "",
+                published: document.getElementById('form-published').checked,
+                featured: document.getElementById('form-featured').checked,
+                pinned: document.getElementById('form-pinned').checked
+            };
+
+            closePostModal();
+            showLoadingScreen(true);
+
+            try {
+                await fetch(SHEET_API_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(entityPackage)
+                });
+                
+                alert("Database Package Transferred Successfully!");
+                setTimeout(() => { loadPostsFromSheet(); }, 1500);
+            } catch(err) {
+                console.error("Write Operation Defect:", err);
+                alert("Failed to write package to Cloud Matrix.");
+                showLoadingScreen(false);
+            }
+        }
+
+        async function fireDeleteEntityRequest(postId) {
+            if(!confirm("Are you absolutely sure you want to completely erase this notification data from Google Sheet?")) return;
+            
+            showLoadingScreen(true);
+            try {
+                await fetch(SHEET_API_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "delete", id: postId })
+                });
+
+                alert("Entity row deleted successfully from cloud database.");
+                setTimeout(() => { loadPostsFromSheet(); }, 1500);
+            } catch(err) {
+                console.error("Deletion pipeline fault:", err);
+                alert("System rejected the deletion interface call.");
+                showLoadingScreen(false);
+            }
+        }
+
+        function populateEditEntityField(postId) {
+            const item = appState.posts.find(p => p.id === postId);
+            if(!item) return;
+
+            document.getElementById('edit-entity-id').value = item.id;
+            document.getElementById('form-title').value = item.title || "";
+            document.getElementById('form-dept').value = item.department || "";
+            document.getElementById('form-category').value = item.category || "SSC";
+            document.getElementById('form-qual').value = item.qualification || "";
+            document.getElementById('form-date').value = item.lastDate || "";
+            document.getElementById('form-advt').value = item.advtNo || "";
+            document.getElementById('form-salary').value = item.salary || "";
+            document.getElementById('form-age').value = item.ageLimit || "";
+            document.getElementById('form-mode').value = item.applyMode || "";
+            document.getElementById('form-jobtype').value = item.jobType || "";
+            document.getElementById('form-apply').value = item.applyUrl || "";
+            document.getElementById('form-details').value = item.detailsUrl || "";
+            document.getElementById('form-desc').value = item.description || "";
+            
+            document.getElementById('form-published').checked = (item.published === true || item.published === "true");
+            document.getElementById('form-featured').checked = (item.featured === true || item.featured === "true");
+            document.getElementById('form-pinned').checked = (item.pinned === true || item.pinned === "true");
+
+            document.getElementById('editor-modal-title').textContent = "Modify Notification Row Entry";
+            document.getElementById('post-editor-modal').classList.remove('hidden');
+        }
+
+        // PASSCODE ENCRYPTION MODALS
+        function openPasswordModal() { document.getElementById('password-change-modal').classList.remove('hidden'); }
+        function closePasswordModal() {
+            document.getElementById('password-change-modal').classList.add('hidden');
+            document.getElementById('password-error').classList.add('hidden');
+            document.getElementById('password-success').classList.add('hidden');
+            document.getElementById('old-passcode-field').value = "";
+            document.getElementById('new-passcode-field').value = "";
+        }
+        function saveNewPassword() {
+            const oldP = document.getElementById('old-passcode-field').value;
+            const newP = document.getElementById('new-passcode-field').value;
+            const currentP = localStorage.getItem('shiv_tech_key') || DEFAULT_PASSCODE;
+
+            if (oldP !== currentP) {
+                document.getElementById('password-error').classList.remove('hidden');
+                return;
+            }
+            if(newP.trim() === "") return alert("Passcode cannot be null.");
+
+            localStorage.setItem('shiv_tech_key', newP);
+            document.getElementById('password-error').classList.add('hidden');
+            document.getElementById('password-success').classList.remove('hidden');
+            setTimeout(() => { closePasswordModal(); }, 1000);
+        }
+
+        // GENERAL SYSTEM MODALS OPERATIONS
+        function openPostModal() {
+            document.getElementById('editor-form').reset();
+            document.getElementById('edit-entity-id').value = "";
+            document.getElementById('editor-modal-title').textContent = "Add New Notification Entity";
+            document.getElementById('post-editor-modal').classList.remove('hidden');
+        }
+        function closePostModal() { document.getElementById('post-editor-modal').classList.add('hidden'); }
+
+        // FIXED: अप्लाई क्लिक करते ही Post ID और Title ऑटोमैटिक फॉर्म में आ जाएंगे
+        function openCustomerApplyModal(id, title) {
+            document.getElementById('cust-post-id').value = id;
+            document.getElementById('cust-post-title').value = title;
+            document.getElementById('customer-google-form').reset();
+            document.getElementById('cust-post-id').value = id; // reset के बाद दोबारा सेट
+            document.getElementById('cust-post-title').value = title;
+            document.getElementById('customer-apply-modal').classList.remove('hidden');
+        }
+        function closeCustomerApplyModal() { document.getElementById('customer-apply-modal').classList.add('hidden'); }
+
+        function submitApplicationToGoogle(e) {
+            e.preventDefault();
+            const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdhIEH0pnrFGVLrExyU2dJHBLEJZOhx4W40-S_gHbZzMpP5ww/formResponse";
+            
+            const formData = new FormData();
+            formData.append("entry.315470709", document.getElementById('cust-post-id').value);
+            formData.append("entry.1663516592", document.getElementById('cust-post-title').value);
+            formData.append("entry.1043863033", document.getElementById('cust-name').value);
+            formData.append("entry.450361044", document.getElementById('cust-email').value);
+            formData.append("entry.81928602", document.getElementById('cust-phone').value);
+
+            fetch(formUrl, { method: "POST", mode: "no-cors", body: formData })
+            .then(() => {
+                alert("Application Package Matrix Deployed Successfully! The admin will contact you shortly.");
+                closeCustomerApplyModal();
+            })
+            .catch(() => {
+                alert("Deployment pipeline intercept defect. Form submit failed.");
+            });
+        }
+
+        // DETAILED SPECS MODAL VIEW POPULATE
+        function openDetailViewModal(id) {
+            const post = appState.posts.find(p => p.id === id);
+            if(!post) return;
+
+            document.getElementById('dt-badge').textContent = post.category;
+            document.getElementById('dt-title').textContent = post.title;
+            document.getElementById('dt-dept').textContent = post.department;
+            document.getElementById('dt-qual').textContent = post.qualification;
+            document.getElementById('dt-date').textContent = post.lastDate;
+            document.getElementById('dt-jobtype').textContent = post.jobType || "Permanent";
+            document.getElementById('dt-mode').textContent = post.applyMode || "Online";
+            
+            document.getElementById('dt-advt').textContent = post.advtNo || "N/A";
+            document.getElementById('dt-salary').textContent = post.salary || "Normative";
+            document.getElementById('dt-age').textContent = post.ageLimit || "N/A";
+            document.getElementById('dt-desc').textContent = post.description || "No metadata description logs provided.";
+
+            document.getElementById('dt-details-link').href = post.detailsUrl || "#";
+            document.getElementById('dt-apply-btn').onclick = () => {
+                closeDetailModal();
+                openCustomerApplyModal(post.id, post.title);
+            };
+
+            document.getElementById('detail-view-modal').classList.remove('hidden');
+        }
+        function closeDetailModal() { document.getElementById('detail-view-modal').classList.add('hidden'); }
+
+        // ALERTS AND SLIDERS LOGIC
+        function populateNotificationAlertsPanel() {
+            const list = document.getElementById('notif-list');
+            list.innerHTML = "";
+            const freshPosts = appState.posts.slice(0, 4);
+
+            if(freshPosts.length === 0) {
+                list.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">No active matrix warnings broadcasted.</div>`;
+                return;
+            }
+
+            freshPosts.forEach(p => {
+                const row = document.createElement('div');
+                row.className = "p-3 border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/30 cursor-pointer text-xs transition";
+                row.onclick = () => { openDetailViewModal(p.id); document.getElementById('notif-panel').classList.add('hidden'); };
+                row.innerHTML = `
+                    <div class="font-black text-slate-700 dark:text-slate-200 truncate">${p.title}</div>
+                    <div class="text-[10px] text-slate-400 font-semibold mt-0.5">${p.category} track &bull; Closing ${p.lastDate}</div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function switchSlide(index) {
+            appState.activeSlideIdx = index;
+            const data = heroSlidesData[index];
+            const targetContainer = document.getElementById('hero-slide-content');
+            if(!targetContainer) return;
+            
+            targetContainer.style.opacity = 0;
+            setTimeout(() => {
+                targetContainer.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 bg-brand-500/20 border border-brand-500/30 text-brand-300 font-bold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider">${data.badge}</span>
+                    <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">${data.title}</h1>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-lg leading-relaxed">${data.desc}</p>
+                `;
+                targetContainer.style.opacity = 1;
+            }, 150);
+
+            const dots = document.querySelectorAll('.slider-dot');
+            dots.forEach((dot, dIdx) => { 
+                dot.className = dIdx === index ? "w-8 h-2 rounded-full bg-white transition-all slider-dot" : "w-2 h-2 rounded-full bg-white/40 transition-all slider-dot"; 
+            });
+        }
+
+        function openBannerEditModal() {
+            document.getElementById('edit-slide0-title').value = heroSlidesData[0].title;
+            document.getElementById('edit-slide0-desc').value = heroSlidesData[0].desc;
+            document.getElementById('edit-slide1-title').value = heroSlidesData[1].title;
+            document.getElementById('edit-slide1-desc').value = heroSlidesData[1].desc;
+            document.getElementById('edit-slide2-title').value = heroSlidesData[2].title;
+            document.getElementById('edit-slide2-desc').value = heroSlidesData[2].desc;
+            document.getElementById('banner-edit-modal').classList.remove('hidden');
+        }
+        function closeBannerEditModal() { document.getElementById('banner-edit-modal').classList.add('hidden'); }
+        function saveBannerTexts() {
+            heroSlidesData[0].title = document.getElementById('edit-slide0-title').value;
+            heroSlidesData[0].desc = document.getElementById('edit-slide0-desc').value;
+            heroSlidesData[1].title = document.getElementById('edit-slide1-title').value;
+            heroSlidesData[1].desc = document.getElementById('edit-slide1-desc').value;
+            heroSlidesData[2].title = document.getElementById('edit-slide2-title').value;
+            heroSlidesData[2].desc = document.getElementById('edit-slide2-desc').value;
+            closeBannerEditModal();
+            switchSlide(appState.activeSlideIdx);
+        }
+
+        function triggerAdminFloatingAction() {
+            if (appState.isAdmin) {
+                const db = document.getElementById('admin-dashboard');
+                if (db) {
+                    db.classList.toggle('hidden');
+                    if(!db.classList.contains('hidden')) db.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else openAdminAuthModal();
+        }
     </script>
 </body>
 </html>
